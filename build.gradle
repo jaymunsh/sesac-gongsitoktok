@@ -1,0 +1,93 @@
+/*
+ * 상대 경로: build.gradle
+ *
+ * 공시톡톡(gongsitoktok) 어시스턴트 백엔드 빌드 스크립트.
+ *
+ * 핵심 결정:
+ *  - Java 21 toolchain : 가상 스레드(Virtual Threads) 안정 사용을 위한 최저 라인.
+ *  - Spring Boot 3.5.x : 가상 스레드 자동 통합(`spring.threads.virtual.enabled`) 지원.
+ *  - Groovy DSL        : 명세(CLAUDE.md §3) 채택안.
+ *  - bootRun JVM 옵션  : `-Djdk.tracePinnedThreads=short` 를 로컬·스테이지에서 자동 부착해
+ *                       Pinned Thread 발생 시 짧은 스택으로 즉시 식별 가능.
+ *  - JJWT 0.12.x       : api/impl/jackson 3-모듈 분리 패턴.
+ *  - Caffeine          : JWT 검증 캐시 + 블랙리스트(§스텝 F).
+ *  - micrometer-context-propagation : WebClient 리액티브 체인의 MDC 전파.
+ */
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.gongsitoktok'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // ===== Spring Boot Core =====
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'      // WebClient 전용 (서버는 servlet 사용, WebFlux는 client only)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // ===== Security · OAuth2 · JWT =====
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // ===== 캐싱 (JWT 검증 결과 + 블랙리스트) =====
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
+    // ===== Reactor / MDC 전파 =====
+    // WebClient 리액티브 체인 상에서 MDC(traceId) 자동 전파를 위함 (§스텝 B)
+    // 정확한 아티팩트 ID 는 'context-propagation' (micrometer prefix 없음).
+    implementation 'io.micrometer:context-propagation:1.1.1'
+
+    // ===== Database =====
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // ===== Swagger / OpenAPI v2 =====
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // ===== Lombok =====
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // ===== Test =====
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootRun {
+    // 로컬·스테이지 환경에서 가상 스레드의 Pinned Thread 발생 시 짧은 스택을 로그에 즉시 노출.
+    // 운영 배포 시에는 별도 JVM 옵션으로 제어하므로 본 옵션은 bootRun(개발용 실행) 전용.
+    jvmArgs += [
+            '-Djdk.tracePinnedThreads=short'
+    ]
+}

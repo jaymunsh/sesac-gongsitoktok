@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  상대 경로: src/main/resources/logback-spring.xml
+
+  핵심:
+    - [%X{traceId}] : MDC traceId 가 모든 로그 라인에 노출 (§스텝 B·G)
+    - 운영 환경 시: 추후 LogstashEncoder(JSON) 로 전환할 자리만 주석으로 표시 (Loki 라벨 파싱 효율)
+    - dev/prod 패턴 동일 (운영도 traceId 추적 가능해야 함)
+-->
+<configuration>
+
+    <property name="LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{traceId:-}] [%thread] %-40.40logger{39} : %msg%n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--
+            TODO(monitoring): 운영 환경에서는 본 ConsoleAppender 의 encoder 를
+            ch.qos.logback:logback-classic + net.logstash.logback:logstash-logback-encoder 의
+            LogstashEncoder 로 갈아끼우면 Loki/ELK 가 JSON 라벨을 그대로 파싱 가능.
+            의존성·전환은 모니터링 스택 도입 시기에 함께 처리.
+        -->
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

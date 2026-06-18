@@ -1,0 +1,25 @@
+# 상대 경로: src/main/resources/application-prod.yml
+#
+# 운영 환경 프로파일.
+#  - ddl-auto: validate   : 엔티티-스키마 불일치 시 부팅 거부 (스키마 변경은 Flyway/Liquibase 도입 전제)
+#  - show-sql: false      : 운영 로그 비대화 방지
+#  - DB/시크릿            : 모두 환경변수 주입 (평문 commit 금지)
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+logging:
+  level:
+    root: INFO
+    com.gongsitoktok.assistant: INFO
+    org.hibernate.SQL: WARN
+    org.springframework.web: INFO
+    org.springframework.security: WARN

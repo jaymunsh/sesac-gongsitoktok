@@ -1,0 +1,8 @@
+/*
+ * 상대 경로: settings.gradle
+ *
+ * Gradle 멀티 모듈 정의(현재는 단일 모듈)와 루트 프로젝트 이름을 지정한다.
+ * Spring Boot 3.5.x + Gradle 8.x(Groovy DSL) 기준.
+ */
+
+rootProject.name = 'gongsitoktok-assistant'
