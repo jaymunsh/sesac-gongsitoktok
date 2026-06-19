@@ -1,5 +1,5 @@
 /*
- * 상대 경로: src/main/java/com/gongsitoktok/assistant/GongsiTokTokkAssistantApplication.java
+ * 상대 경로: src/main/java/com/gongsitoktok/assistant/GongsiTokTokAssistantApplication.java
  */
 package com.gongsitoktok.assistant;
 

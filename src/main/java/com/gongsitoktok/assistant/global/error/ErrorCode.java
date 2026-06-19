@@ -35,6 +35,7 @@ public enum ErrorCode {
     USER_WITHDRAWN(HttpStatus.FORBIDDEN, "탈퇴 처리된 계정입니다."),
     OAUTH_USER_PASSWORD_CHANGE_DENIED(HttpStatus.FORBIDDEN, "OAuth 가입 사용자는 비밀번호를 변경할 수 없습니다."),
     OAUTH_FAILED(HttpStatus.BAD_REQUEST, "소셜 로그인에 실패했습니다."),
+    OAUTH_UNLINK_FAILED(HttpStatus.BAD_GATEWAY, "소셜 계정 연동 해제에 실패했습니다. 잠시 후 다시 시도해 주세요."),
 
     // ===== 회원가입·정책 =====
     PASSWORD_POLICY_VIOLATION(HttpStatus.BAD_REQUEST, "비밀번호 정책(8자 이상, 대/소문자·숫자·특수문자 각 1개 이상)을 만족하지 않습니다."),

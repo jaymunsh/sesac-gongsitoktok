@@ -4,6 +4,7 @@
 package com.gongsitoktok.assistant.user.service;
 
 import com.gongsitoktok.assistant.auth.jwt.JwtTokenProvider;
+import com.gongsitoktok.assistant.auth.oauth.OAuth2UnlinkClient;
 import com.gongsitoktok.assistant.auth.service.RefreshTokenService;
 import com.gongsitoktok.assistant.auth.validator.PasswordValidator;
 import com.gongsitoktok.assistant.global.error.ErrorCode;
@@ -19,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +55,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final OAuth2UnlinkClient oauth2UnlinkClient;
+    private final OAuth2AuthorizedClientService oauth2AuthorizedClientService;
 
     @Qualifier("bcryptExecutor")
     private final ExecutorService bcryptExecutor;
@@ -117,6 +122,18 @@ public class UserService {
     /**
      * 회원 탈퇴 (§4-6) — soft delete + 식별자 dismiss 변형.
      *
+     * <h3>OAuth provider 연동 해제 (strict)</h3>
+     * <p>{@code oauthService != LOCAL} 인 경우 provider 측 unlink/revoke 를 호출하고, <b>실패 시 우리 측 탈퇴도 함께 실패</b>로 처리한다.</p>
+     * <ul>
+     *     <li>{@link OAuth2UnlinkClient} 가 실패 시 {@link BusinessException}({@link ErrorCode#OAUTH_UNLINK_FAILED}) 던짐.</li>
+     *     <li>본 메서드가 {@code @Transactional} 이므로 예외 발생 시 {@code tb_user} 의 dismiss·{@code isActive=false} 변경이 자동 롤백.</li>
+     *     <li>{@code refreshTokenService.revokeAllByUser}, JWT 블랙리스트 등 후속 단계 자체가 실행되지 않음.</li>
+     *     <li>사용자는 {@code 502 OAUTH_UNLINK_FAILED} 응답을 받고 재시도를 유도 — 우리 DB 와 provider 측 상태가 일관 유지.</li>
+     * </ul>
+     *
+     * <p>OAuth 가 비활성 상태(현 시점)에서는 가입된 OAuth 사용자가 없으므로 분기 자체가 실행되지 않는다.
+     * 향후 OAuth 활성 시 자동으로 동작 — 별도 코드 변경 불필요.</p>
+     *
      * @return 신규 탈퇴면 {@code alreadyWithdrawn=false}, 멱등이면 {@code true}.
      */
     @Transactional
@@ -128,6 +145,11 @@ public class UserService {
             return new WithdrawResponse(user.getWithdrawnAt(), true);
         }
 
+        // OAuth 사용자라면 provider 측 unlink 호출 — 실패 시 예외 그대로 전파 → 트랜잭션 롤백
+        if (user.getOauthService() != OauthService.LOCAL) {
+            unlinkOauthProvider(user);
+        }
+
         long epoch = System.currentTimeMillis();
         LocalDateTime now = LocalDateTime.now();
         user.markWithdrawn(epoch, now);
@@ -137,6 +159,28 @@ public class UserService {
 
         log.info("회원 탈퇴 처리: userSeq={}, dismissed userId={}", userSeq, user.getUserId());
         return new WithdrawResponse(now, false);
+    }
+
+    /**
+     * provider 측 OAuth 연동 해제 호출.
+     *
+     * <p>Spring Security 가 OAuth 로그인 시점에 {@link OAuth2AuthorizedClientService} (기본 InMemory) 에
+     * 자동 저장한 access token 을 조회하여 사용. 토큰 미보유·provider API 실패 시 {@link OAuth2UnlinkClient} 가
+     * {@link BusinessException}({@link ErrorCode#OAUTH_UNLINK_FAILED}) 을 던지며, 본 메서드는 이를 그대로 전파한다.</p>
+     */
+    private void unlinkOauthProvider(User user) {
+        String registrationId = user.getOauthService().name().toLowerCase();
+        // principalName 은 OAuth2User.getName() 이 반환한 값과 매칭되어야 한다.
+        // 우리 OAuth2UserPrincipal.getName() 은 attributes[nameAttributeKey] 를 반환하며,
+        // provider 별로 값이 다르지만 결국 providerId 와 동치 또는 그 직렬화 형태가 됨.
+        OAuth2AuthorizedClient client = oauth2AuthorizedClientService.loadAuthorizedClient(
+                registrationId, user.getProviderId());
+
+        String accessToken = (client != null && client.getAccessToken() != null)
+                ? client.getAccessToken().getTokenValue()
+                : null;
+
+        oauth2UnlinkClient.unlink(user.getOauthService(), accessToken).block();
     }
 
     // ===== 내부 =====
