@@ -6,6 +6,7 @@ package com.gongsitoktok.assistant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * 공시톡톡(gongsitoktok) 어시스턴트 백엔드 진입점.
@@ -17,6 +18,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
  *         carrier thread 점유 없이 동작.</li>
  *     <li>{@link EnableAsync} 로 비동기 메서드 인식 — 영속화({@code ChatPersistenceService}) 가
  *         별도 빈에서 fire-and-forget 으로 처리.</li>
+ *     <li>{@link EnableScheduling} 로 {@code @Scheduled} 메서드 인식 —
+ *         {@code ChatRoomExpiryScheduler} 가 1분 주기로 30분 만료된 활성 방을 일괄 close.
+ *         단일 인스턴스 운영 기준이며, 다중 인스턴스 도입 시 ShedLock 으로 분산 락 필요 (later.md).</li>
  *     <li>{@code Hooks.enableAutomaticContextPropagation()} 은 {@code ReactorContextConfig} 에서
  *         {@code @PostConstruct} 로 활성 — WebClient 리액티브 체인의 MDC 전파 자동화.</li>
  * </ul>
@@ -25,6 +29,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 public class GongsiTokTokAssistantApplication {
 
     /**

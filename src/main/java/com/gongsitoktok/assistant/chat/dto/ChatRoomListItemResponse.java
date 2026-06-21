@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 /**
  * 마이페이지 대화방 목록 항목 (v2 — {@code isActive=false} 만 노출 정책).
  *
- * <p>{@code corpCode}/{@code corpName} 은 JOIN FETCH 로 한 쿼리에 묶어 조회.</p>
+ * <p>{@code corpCode}/{@code corpName}/{@code logoUrl} 은 JOIN FETCH 로 한 쿼리에 묶어 조회.</p>
  *
  * @param roomId       대화방 PK
  * @param roomTitle    최초 질문 첫 20자 슬라이싱 (목록 카드 본문 표시용)
  * @param corpCode     기업 외부 노출 키
- * @param corpName     기업명 (목록 카드 칩 표시용)
+ * @param corpName     기업명 (로고 이미지 alt + 로고 부재 시 fallback 텍스트로 사용)
+ * @param logoUrl      기업 로고 URL (nullable — 등록 안 된 기업은 프론트가 fallback 표시)
  * @param createdAt    방 생성 시각 — 마이페이지에서 날짜별 그룹화 키
  * @param lastActiveAt 마지막 활동 시각 — 카드 우측 시간 표시용
  * @param closedAt     세션 종료(만료) 시각. 활성 방은 {@code null} 이지만 본 목록은 만료 방만 반환하므로 항상 값 있음
@@ -27,6 +28,7 @@ public record ChatRoomListItemResponse(
         String roomTitle,
         String corpCode,
         String corpName,
+        String logoUrl,
         LocalDateTime createdAt,
         LocalDateTime lastActiveAt,
         LocalDateTime closedAt
@@ -37,6 +39,7 @@ public record ChatRoomListItemResponse(
                 r.getRoomTitle(),
                 r.getCompany().getCorpCode(),
                 r.getCompany().getCorpName(),
+                r.getCompany().getLogoUrl(),
                 r.getCreatedAt(),
                 r.getLastActiveAt(),
                 r.getClosedAt()

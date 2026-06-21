@@ -3,8 +3,10 @@
  */
 package com.gongsitoktok.assistant.chat.service;
 
+import com.gongsitoktok.assistant.chat.dto.ActiveChatRoomResponse;
 import com.gongsitoktok.assistant.chat.dto.ChatMessagesResponse;
 import com.gongsitoktok.assistant.chat.dto.ChatRoomListItemResponse;
+import com.gongsitoktok.assistant.chat.dto.CloseRoomResponse;
 import com.gongsitoktok.assistant.chat.entity.ChatRoom;
 import com.gongsitoktok.assistant.chat.entity.QaHistory;
 import com.gongsitoktok.assistant.chat.repository.ChatRoomRepository;
@@ -116,6 +118,81 @@ public class ChatRoomService {
     }
 
     /**
+     * 동일 (userSeq, corpCode) 에 속한 활성 방을 lookup.
+     *
+     * <h3>SOFT 단일 활성 방 정책</h3>
+     * <ul>
+     *     <li>{@link ChatRoomRepository#findActiveByUserSeqAndCorpCode} 가 lastActiveAt DESC 로 반환 — 첫 항목(가장 최근) 채택.</li>
+     *     <li>2번째 이상 항목은 모두 lazy {@link ChatRoom#close} — race 로 잠시 다수 활성된 방을 정리.</li>
+     *     <li>채택된 첫 항목이 30분 만료 임계 초과면 즉시 close 후 "활성 방 없음" 으로 반환 ({@code Optional.empty()}).</li>
+     * </ul>
+     *
+     * <h3>read 의미 유지</h3>
+     * <p>{@code lastActiveAt} 은 <b>터치하지 않는다</b>. 페이지만 띄워두고 입력 안 하면 30분 만료가 영원히 안 일어나는
+     * 사태를 막기 위함. 실제 메시지가 발생하는 {@link #validateAndTouch} 만 lastActiveAt 을 갱신.</p>
+     *
+     * @return 활성 + 미만료인 방이 있으면 응답 DTO, 없으면 {@link java.util.Optional#empty()}
+     */
+    @Transactional
+    public java.util.Optional<ActiveChatRoomResponse> findActiveRoom(Long userSeq, String corpCode) {
+        // 기업 자체 검증 (없는 corpCode 면 404) — createRoom 패턴과 일관성
+        companyRepository.findByCorpCodeAndIsActiveTrue(corpCode)
+                .orElseThrow(() -> new CompanyNotFoundException(corpCode));
+
+        List<ChatRoom> activeRooms = chatRoomRepository.findActiveByUserSeqAndCorpCode(userSeq, corpCode);
+        if (activeRooms.isEmpty()) {
+            return java.util.Optional.empty();
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        ChatRoom latest = activeRooms.get(0);
+
+        // SOFT 정책 — 2번째 이상 활성 방은 race 정리 대상
+        for (int i = 1; i < activeRooms.size(); i++) {
+            activeRooms.get(i).close(now);
+        }
+
+        // 채택된 방이 만료 임계 초과면 즉시 close 후 "없음" 반환 (사용자는 새 방을 만들게 됨)
+        if (latest.isExpired(now)) {
+            latest.close(now);
+            return java.util.Optional.empty();
+        }
+
+        return java.util.Optional.of(ActiveChatRoomResponse.from(latest));
+    }
+
+    /**
+     * 명시적 세션 종료 — 30분 자동 만료를 기다리지 않고 즉시 방을 닫는다.
+     *
+     * <h3>사용 시나리오</h3>
+     * <ul>
+     *     <li>테스트/QA — 만료 흐름을 30분 대기 없이 검증.</li>
+     *     <li>추후 프론트에 "대화 종료" 버튼이 추가될 경우의 백엔드 거점.</li>
+     * </ul>
+     *
+     * <h3>멱등성</h3>
+     * <p>{@link ChatRoom#close} 가 이미 멱등 (활성 상태가 아닐 때 no-op) 이므로 본 메서드도 자연 멱등.
+     * 이미 닫혀 있던 방은 {@code alreadyClosed=true} 로 표시하고 {@code closedAt} 은 <b>최초 종료 시각</b> 그대로 반환.</p>
+     *
+     * <h3>본인 소유 검증</h3>
+     * <p>{@link #validateAndTouch} 와 동일하게 "없음" / "타인 소유" 모두 단일 {@link ChatRoomNotFoundException} (404) 로 응답해 정보 누출 차단.
+     * 단, 본 메서드는 {@code isActive} 검사를 하지 않음 — 이미 닫힌 방에 대해서도 멱등 응답을 돌려주기 위함.</p>
+     */
+    @Transactional
+    public CloseRoomResponse close(Long roomId, Long userSeq) {
+        ChatRoom room = chatRoomRepository.findByIdWithCompany(roomId)
+                .orElseThrow(() -> new ChatRoomNotFoundException(roomId));
+        if (!room.isOwnedBy(userSeq)) {
+            throw new ChatRoomNotFoundException(roomId);
+        }
+        boolean wasAlreadyClosed = !room.isActive();
+        if (!wasAlreadyClosed) {
+            room.close(LocalDateTime.now());
+        }
+        return CloseRoomResponse.of(room.getRoomId(), room.getClosedAt(), wasAlreadyClosed);
+    }
+
+    /**
      * 타임라인 조회 — 만료된 방의 기록 열람이 마이페이지의 주 기능이므로 {@code isActive} 무관하게 본인 소유면 허용.
      */
     @Transactional(readOnly = true)
@@ -133,6 +210,9 @@ public class ChatRoomService {
                 room.getRoomId(),
                 room.getCompany().getCorpCode(),
                 room.getCompany().getCorpName(),
+                room.isActive(),
+                room.getLastActiveAt(),
+                room.getClosedAt(),
                 items
         );
     }

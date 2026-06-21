@@ -6,9 +6,11 @@ package com.gongsitoktok.assistant.chat.controller;
 import com.gongsitoktok.assistant.chat.client.FastApiChatClient;
 import com.gongsitoktok.assistant.chat.client.UpstreamErrorMapper;
 import com.gongsitoktok.assistant.chat.dto.AskRequest;
+import com.gongsitoktok.assistant.chat.dto.ActiveChatRoomResponse;
 import com.gongsitoktok.assistant.chat.dto.ChatMessagesResponse;
 import com.gongsitoktok.assistant.chat.dto.ChatResponse;
 import com.gongsitoktok.assistant.chat.dto.ChatRoomListItemResponse;
+import com.gongsitoktok.assistant.chat.dto.CloseRoomResponse;
 import com.gongsitoktok.assistant.chat.dto.ContinueRequest;
 import com.gongsitoktok.assistant.chat.dto.fastapi.CompanyContext;
 import com.gongsitoktok.assistant.chat.dto.fastapi.FastApiChatRequest;
@@ -28,11 +30,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -86,7 +90,7 @@ public class ChatController {
         );
         FastApiChatResponse fastResp = blockOnFastApi(fastReq);
         handleErrorOrPersist(room.getRoomId(), req.question(), fastResp);
-        return ChatResponse.from(room.getRoomId(), fastResp);
+        return ChatResponse.from(room, fastResp);
     }
 
     @Operation(summary = "기존 대화방 이어하기 (Multi-turn)",
@@ -112,7 +116,7 @@ public class ChatController {
         );
         FastApiChatResponse fastResp = blockOnFastApi(fastReq);
         handleErrorOrPersist(roomId, req.question(), fastResp);
-        return ChatResponse.from(roomId, fastResp);
+        return ChatResponse.from(room, fastResp);
     }
 
     @Operation(summary = "마이페이지 — 만료된 대화방 목록",
@@ -135,9 +139,44 @@ public class ChatController {
         return chatRoomService.timeline(roomId, principal.userSeq());
     }
 
+    @Operation(summary = "특정 기업의 내 활성 방 lookup",
+            description = """
+                    동일 (userSeq, corpCode) 에 속한 활성 방을 단건 조회. 프론트 CompanyPage 마운트 및 \
+                    윈도우 포커스 회복 시점에 호출. 있으면 200 + ActiveChatRoomResponse, 없으면 204 No Content. \
+                    SOFT 단일 활성 방 정책 — race 로 잠시 다수 활성된 방은 본 호출 시점에 lazy close 정리됨.""")
+    @ApiResponse(responseCode = "200", description = "활성 방 존재")
+    @ApiResponse(responseCode = "204", description = "활성 방 없음 (기업은 정상)")
+    @ApiResponse(responseCode = "404", description = "COMPANY_NOT_FOUND")
+    @GetMapping(value = "/room/active", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ActiveChatRoomResponse> activeRoom(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @RequestParam("corpCode") String corpCode
+    ) {
+        return chatRoomService.findActiveRoom(principal.userSeq(), corpCode)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    @Operation(summary = "대화방 명시적 종료 (close)",
+            description = """
+                    30분 자동 만료를 기다리지 않고 세션을 즉시 닫는다. 멱등 — 이미 닫힌 방을 다시 호출해도 \
+                    동일 응답을 반환하며 closedAt 은 최초 종료 시각이 유지됨. 닫힌 방은 마이페이지(만료 목록)에 \
+                    합류하고, /chat/room/{roomId}/continue 호출은 404 로 차단된다. \
+                    테스트/QA 목적이자 추후 "대화 종료" UI 의 백엔드 거점.""")
+    @ApiResponse(responseCode = "200", description = "종료 결과 반환 (멱등)")
+    @ApiResponse(responseCode = "404", description = "CHAT_ROOM_NOT_FOUND (방이 없거나 본인 소유 아님)")
+    @PostMapping(value = "/room/{roomId}/close", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CloseRoomResponse close(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable Long roomId
+    ) {
+        return chatRoomService.close(roomId, principal.userSeq());
+    }
+
     // ===== 내부 헬퍼 =====
     // (v2 기획 변경: /chat/room/{roomId}/hide endpoint 제거.
-    //  isActive 의미가 "세션 활성 여부" 로 재정의되어 사용자 hide 개념이 자연 소멸.)
+    //  isActive 의미가 "세션 활성 여부" 로 재정의되어 사용자 hide 개념이 자연 소멸.
+    //  대신 /chat/room/{roomId}/close 를 추가 — 30분 만료를 기다리지 않고 즉시 세션을 닫는 멱등 endpoint.)
 
     /**
      * FastAPI 호출 + 결과 동기 대기. null 응답은 방어적으로 UPSTREAM_ERROR 변환.
