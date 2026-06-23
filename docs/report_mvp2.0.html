@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>공시톡톡 MVP-1.0 종합 시스템 보고서</title>
-  <meta name="description" content="공시톡톡(gongsitoktok) — DART 공시 RAG 챗봇 SPA. 프론트(React) + Spring 백엔드 + FastAPI(CrewAI) 통합 시스템 보고서" />
+  <title>공시톡톡 v2.0 종합 시스템 보고서 — PydanticAI 재구축</title>
+  <meta name="description" content="공시톡톡(gongsitoktok) v2.0 — DART 공시 RAG 챗봇 SPA. gongsitoktok-react + gongsitoktok-spring + gongsitoktok-pydantic(PydanticAI) 3-tier 통합 시스템 보고서. AI 파트를 CrewAI에서 PydanticAI로 재구축, 표-인식 파싱·진짜 하이브리드 검색·사전요약 트랙·3계층 eval까지 포함." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
@@ -196,7 +196,7 @@
       <div class="w-9 h-9 rounded-lg bg-brand-700 text-white flex items-center justify-center text-sm font-bold">공시</div>
       <div>
         <div class="text-sm font-bold text-slate-800 leading-tight">공시톡톡</div>
-        <div class="text-xs text-slate-400 leading-tight">MVP-1.0 시스템 보고서</div>
+        <div class="text-xs text-slate-400 leading-tight">v2.0 — PydanticAI 재구축</div>
       </div>
     </a>
   </div>
@@ -209,18 +209,18 @@
     <a class="nav-link" href="#ch-3">3. Data Model</a>
     <a class="nav-link" href="#ch-4">4. API Reference</a>
     <a class="nav-link" href="#ch-5">5. Sequence Flows</a>
-    <a class="nav-link" href="#ch-6">6. Frontend</a>
-    <a class="nav-link" href="#ch-7">7. Spring Backend</a>
-    <a class="nav-link" href="#ch-8">8. FastAPI / AI</a>
+    <a class="nav-link" href="#ch-6">6. Frontend · gongsitoktok-react</a>
+    <a class="nav-link" href="#ch-7">7. Backend · gongsitoktok-spring</a>
+    <a class="nav-link" href="#ch-8">⭐ 8. AI Agent · gongsitoktok-pydantic</a>
     <a class="nav-link" href="#ch-9">9. Non-Functional</a>
     <a class="nav-link" href="#ch-10">10. Future Work</a>
     <a class="nav-link" href="#ch-11">11. Appendix</a>
-    <a class="nav-link" href="#ch-12">⭐ 12. Recommended Improvements</a>
+    <a class="nav-link" href="#ch-12">12. Recommended Improvements</a>
   </nav>
 
   <div class="mt-8 pt-4 border-t border-slate-100 text-[11px] text-slate-400 leading-relaxed">
-    <div class="mb-1">📅 발행 2026-06-21</div>
-    <div class="mb-1">📦 MVP 1차 완료 시점</div>
+    <div class="mb-1">📅 발행 2026-06-23 (v2.0)</div>
+    <div class="mb-1">🔄 AI 파트 PydanticAI 재구축</div>
     <div>🖨 Cmd+P → PDF 저장</div>
   </div>
 </aside>
@@ -232,14 +232,15 @@
   <!-- 타이틀 -->
   <header class="mb-12 pb-8 border-b border-slate-200">
     <div class="flex items-center gap-2 mb-3 flex-wrap">
-      <span class="chip chip-brand">MVP-1.0</span>
-      <span class="chip chip-slate">📅 발행 2026-06-21</span>
+      <span class="chip chip-brand">v2.0</span>
+      <span class="chip chip-blue">PydanticAI 재구축</span>
+      <span class="chip chip-slate">📅 발행 2026-06-23</span>
       <span class="chip chip-slate">📝 최종 수정 2026-06-23</span>
       <a href="#ch-11-6" class="chip chip-amber hover:underline">📋 수정 이력 →</a>
     </div>
     <h1 class="text-4xl font-bold text-slate-900 leading-tight mb-3">공시톡톡 종합 시스템 보고서</h1>
-    <p class="text-lg text-slate-600 leading-relaxed">DART 공시를 사전 적재한 RAG 챗봇 SPA — 프론트(React) · Spring 백엔드 · FastAPI(CrewAI) 3-tier 통합 산출물</p>
-    <p class="mt-4 text-sm text-slate-500">처음 보는 사람도 이 문서 하나로 시스템 전반을 파악할 수 있도록 설계됨. 각 챕터는 독립적으로 읽을 수 있으며, 좌측 sidebar 또는 Cmd/Ctrl+F로 빠르게 탐색하세요. <strong>※ 본 v1.0 이후 AI 파트가 PydanticAI로 재구축된 v2.0 보고서가 별도 발행됨</strong> (<code>report_mvp2.0.html</code>).</p>
+    <p class="text-lg text-slate-600 leading-relaxed">DART 공시를 사전 적재한 RAG 챗봇 SPA — <code class="text-base">gongsitoktok-react</code> · <code class="text-base">gongsitoktok-spring</code> · <code class="text-base">gongsitoktok-pydantic</code> 3-tier 통합 산출물</p>
+    <p class="mt-4 text-sm text-slate-500">처음 보는 사람도 이 문서 하나로 시스템 전반을 파악할 수 있도록 설계됨. v1 대비 <strong>AI 파트(8장)가 CrewAI → PydanticAI로 재구축</strong>되어 표-인식 파싱·진짜 하이브리드 검색(RRF)·사전요약 트랙·3계층 eval(검색·행동·회귀)이 추가됨. 각 챕터는 독립적으로 읽을 수 있으며, 좌측 sidebar 또는 Cmd/Ctrl+F로 빠르게 탐색하세요.</p>
   </header>
 
   <!-- ====================================================== -->
@@ -254,31 +255,31 @@
     <div class="chapter-card prose-section">
       <h3 id="ch-1-1" class="text-xl font-bold text-slate-900 mb-3">시스템 한 줄 정의</h3>
       <blockquote>
-        <strong>공시톡톡(gongsitoktok)</strong> 은 사용자가 한국 상장기업의 상세 페이지에서 챗봇으로 <strong>공시·재무·거시</strong> 질의응답을 받는 SPA 서비스입니다.
-        DART 공시를 사전 적재한 벡터 DB(Chroma)에서 RAG 검색을 돌리고, 멀티 에이전트(Router → QA → Verification + CRAG) 로 근거와 신뢰도까지 검증한 답변을 반환합니다.
+        <strong>공시톡톡(gongsitoktok)</strong>은 사용자가 한국 상장기업의 상세 페이지에서 챗봇으로 <strong>공시·재무·거시</strong> 질의응답을 받는 SPA 서비스입니다.
+        한국 전자공시(DART) 정기보고서를 <strong>표 구조까지 보존</strong>해 사전 적재하고(67k 청크), 질문이 들어오면 <strong>라우터→검색→작성→검증</strong>의 PydanticAI 5-에이전트 파이프라인이 <strong>근거(출처·DART 원문 링크)와 정확도(0~1)와 함께</strong> 답합니다. v2.0에서 AI 파트가 CrewAI → <strong>PydanticAI</strong>로 재구축되며, 표-인식 파싱·진짜 하이브리드 검색·사전요약 트랙이 새로 추가됐습니다.
       </blockquote>
 
       <h3 id="ch-1-2" class="text-xl font-bold text-slate-900 mt-8 mb-3">3-tier 시스템 그림</h3>
       <div class="mermaid-card">
           <pre class="mermaid">
 flowchart LR
-  subgraph FE["프론트엔드 (React SPA)"]
+  subgraph FE["gongsitoktok-react (SPA)"]
     direction TB
     UI["React 19 + Vite<br/>Tailwind · zustand · React Query"]
   end
-  subgraph SB["Spring Boot 백엔드 (Java 21 VT)"]
+  subgraph SB["gongsitoktok-spring (Java 21 VT)"]
     direction TB
     SApi["REST API<br/>인증 · 세션 · 이력"]
     SDB[("PostgreSQL<br/>tb_user · tb_chat_room ...")]
     SApi --- SDB
   end
-  subgraph FA["FastAPI AI Agent"]
+  subgraph FA["gongsitoktok-pydantic (FastAPI · stateless)"]
     direction TB
-    FApi["POST /api/v1/chat<br/>CrewAI: Router → QA → Verify"]
-    Chroma[("Chroma 벡터 DB<br/>corpus_&lt;corpCode&gt;")]
+    FApi["POST /api/v1/chat<br/>PydanticAI 5-에이전트<br/>router→검색→writer→verifier"]
+    Chroma[("Chroma<br/>corpus_&lt;corpCode&gt; 67k<br/>summary_&lt;corpCode&gt; 1,188")]
     FApi --- Chroma
   end
-  Ext["DART OpenAPI<br/>한국은행 ECOS<br/>OpenAI / o4-mini"]
+  Ext["DART OpenAPI<br/>한국은행 ECOS<br/>OpenAI (gpt-5.1·gpt-4o-mini·o4-mini)"]
 
   UI -- "HTTPS · JWT" --> SApi
   SApi -- "동기 JSON<br/>X-Trace-Id" --> FApi
@@ -298,46 +299,51 @@ flowchart LR
       <h3 id="ch-1-3" class="text-xl font-bold text-slate-900 mt-8 mb-3">핵심 기술 스택</h3>
       <table class="report-table">
         <thead>
-        <tr><th>영역</th><th>기술</th><th>핵심 결정 사유</th></tr>
+        <tr><th>영역</th><th>레포 · 기술</th><th>핵심 결정 사유</th></tr>
         </thead>
         <tbody>
         <tr>
           <td>프론트</td>
-          <td><code>React 19</code> + <code>Vite</code> + <code>TypeScript</code> + <code>Tailwind 4</code> + <code>zustand</code> + <code>@tanstack/react-query</code></td>
+          <td><code>gongsitoktok-react</code><br/><code>React 19</code> + <code>Vite</code> + <code>TypeScript</code> + <code>Tailwind 4</code> + <code>zustand</code> + <code>@tanstack/react-query</code></td>
           <td>SSR 없는 단일 SPA. 정적 빌드로 CDN 배포 가능</td>
         </tr>
         <tr>
           <td>백엔드</td>
-          <td><code>Spring Boot 3.5.4</code> on <code>Java 21</code> (Virtual Threads)</td>
-          <td>가상 스레드 + WebClient <code>.block()</code> 으로 LLM 90초 대기에도 carrier 무점유</td>
-        </tr>
-        <tr>
-          <td>데이터</td>
-          <td><code>PostgreSQL 16</code> (Spring 전용)<br/><code>Chroma 0.5.23</code> (FastAPI 전용)</td>
-          <td>각 시스템이 자기 DB 단독 소유. 인터서비스는 REST 만</td>
+          <td><code>gongsitoktok-spring</code><br/><code>Spring Boot 3.5.4</code> on <code>Java 21</code> (Virtual Threads)</td>
+          <td>가상 스레드 + WebClient <code>.block()</code>으로 LLM 90초 대기에도 carrier 무점유. 인증·세션·이력 영속화 + FastAPI 동기 호출</td>
         </tr>
         <tr>
           <td>AI Agent</td>
-          <td><code>FastAPI 0.115</code> + <code>CrewAI 0.86</code> + <code>OpenAI gpt-5.1 / o4-mini</code></td>
-          <td>Router → QA → Verification + CRAG. retrieve-then-read 패턴으로 환각 차단</td>
+          <td><code>gongsitoktok-pydantic</code><br/><code>FastAPI 0.115</code> + <code>Python 3.12</code> + <strong><code>pydantic-ai 1.30.x</code></strong> + <code>OpenAI gpt-5.1 / gpt-4o-mini / o4-mini</code></td>
+          <td>v1의 CrewAI에서 PydanticAI로 재구축. <strong>모듈 레벨 5-에이전트 싱글톤</strong> + <code>output_type</code> 네이티브 스키마 검증 + 자동 재시도. 호출당 객체 생성 0개, 정의 코드 -68%</td>
+        </tr>
+        <tr>
+          <td>데이터</td>
+          <td><code>PostgreSQL 16</code> (Spring 전용)<br/><code>Chroma 0.5</code> (FastAPI 전용 — <code>corpus_&lt;corp&gt;</code> 67,023 + <code>summary_&lt;corp&gt;</code> 1,188)<br/><code>SQLite</code> (FastAPI 보조 — 거시 캐시·standalone 보관)</td>
+          <td>각 시스템이 자기 DB 단독 소유. 인터서비스는 REST만. Chroma 이중 컬렉션으로 원문 RAG / 사전요약 트랙 분리</td>
         </tr>
         <tr>
           <td>RAG</td>
-          <td><code>OpenAI text-embedding-3-small</code> (1536d) + Chroma cosine + 도메인 rerank</td>
-          <td>회사별 격리 컬렉션 (<code>corpus_&lt;corpCode&gt;</code>), 키워드 fallback 보강</td>
+          <td><code>text-embedding-3-small</code> (1536d, cosine) + <strong>진짜 하이브리드(벡터∪전체 BM25 RRF)</strong> + 결정적 Contextual 문맥줄 + 표-인식 Markdown 보존</td>
+          <td>회사별 격리 컬렉션. RRF 가중 0.5/0.5로 한쪽이 묻히지 않게. 정확수치는 RAG 아닌 <strong>DART 정형 API(fnlttSinglAcnt)</strong>로 결정적 획득</td>
         </tr>
         <tr>
           <td>인증</td>
           <td>JWT (Access 1h) + Refresh (httpOnly 14d, SHA-256 해시, rotation + reuse 탐지) + <del>OAuth2 (Google/Kakao/Naver)</del></td>
           <td>STATELESS REST + 보안 사고 자동 차단</td>
         </tr>
+        <tr>
+          <td>관측성</td>
+          <td>Spring MDC traceId + <strong><code>Logfire</code> 콘솔 모드</strong> (FastAPI) — 백엔드 <code>X-Trace-Id</code>를 Logfire 루트 span에 바인딩</td>
+          <td>한 trace로 React→Spring→AI 내부(router→검색→writer→verifier) 자식 span까지 추적. 금융권 감사가능성</td>
+        </tr>
         </tbody>
       </table>
 
-      <h3 id="ch-1-4" class="text-xl font-bold text-slate-900 mt-8 mb-3">MVP 1차 완료 범위 체크리스트</h3>
+      <h3 id="ch-1-4" class="text-xl font-bold text-slate-900 mt-8 mb-3">v2.0 완료 범위 체크리스트</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div class="callout callout-tip">
-          <div class="callout-title">✓ 인증·세션</div>
+          <div class="callout-title">✓ 인증·세션 (v1과 동일)</div>
           <ul class="text-sm space-y-1 ml-4 list-disc">
             <li>로컬 회원가입·로그인·로그아웃</li>
             <li>Refresh Token rotation + 재사용 탐지</li>
@@ -346,30 +352,38 @@ flowchart LR
           </ul>
         </div>
         <div class="callout callout-tip">
-          <div class="callout-title">✓ 챗봇</div>
+          <div class="callout-title">✓ 챗봇·UX (v1과 동일)</div>
           <ul class="text-sm space-y-1 ml-4 list-disc">
             <li>첫 질문(/ask) + 이어하기(/continue)</li>
             <li>30분 세션 만료 + 스케줄러 자동 close</li>
             <li>활성 방 lookup (단일 SOFT 정책)</li>
             <li>새 채팅 버튼 + 410 자동 복구</li>
-            <li>출처 모달 + 정확도(grounded_score)</li>
+            <li>출처 모달 + 정확도(groundedScore)</li>
+            <li>마이페이지: 만료 방 목록 + 읽기 전용 패널</li>
+          </ul>
+        </div>
+        <div class="callout callout-tip" style="background:#dbeafe;border-color:#93c5fd;color:#1e3a8a">
+          <div class="callout-title">⭐ AI Agent — v2.0 신규 (PydanticAI)</div>
+          <ul class="text-sm space-y-1 ml-4 list-disc">
+            <li><strong>PydanticAI 5-에이전트</strong> (router·writer·summary·verifier·section_summary) — 모듈 싱글톤, <code>output_type</code> 네이티브 검증</li>
+            <li><strong>표-인식 파싱</strong> (BeautifulSoup) — 표를 Markdown으로 보존, 행·열·COLSPAN 패딩 유지</li>
+            <li><strong>결정적 Contextual 문맥줄</strong> — 청크 앞에 <code>[회사·공시·섹션·종류]</code> 한 줄 (LLM 0원)</li>
+            <li><strong>진짜 하이브리드 검색</strong> (벡터∪전체 BM25 RRF, 동등 가중) — 가짜 하이브리드 → 정답 유실 해소</li>
+            <li><strong>사전요약 트랙</strong> — <code>summary_&lt;corp&gt;</code> 1,188 요약, 빌드때 1회·질의땐 꺼내쓰기. corpus 폴백 보험</li>
+            <li><strong>정형재무 결합</strong> — DART <code>fnlttSinglAcnt</code> 정확수치 + DART 원문 링크</li>
+            <li><strong>거시 결합</strong> — ECOS 환율·금리·국고채·KOSPI + 날짜 SQLite 캐시</li>
+            <li><strong>3계층 eval</strong> — ①검색(무료·결정적, 11/11 hit@5 100%, MRR 0.923) ②행동(6/6) ③회귀 골든(12/12)</li>
+            <li><strong>Logfire 콘솔 관측성</strong> + <code>X-Trace-Id</code> 端-to-端 추적</li>
           </ul>
         </div>
         <div class="callout callout-tip">
-          <div class="callout-title">✓ 마이페이지·이력</div>
+          <div class="callout-title">✓ 데이터 (v2.0 적재 완료)</div>
           <ul class="text-sm space-y-1 ml-4 list-disc">
-            <li>만료 방 목록 (날짜 그룹 + 로고)</li>
-            <li>읽기 전용 패널 + 출처 모달 재사용</li>
-            <li>풀스크린 / 모바일 오버레이 3-mode</li>
-          </ul>
-        </div>
-        <div class="callout callout-tip">
-          <div class="callout-title">✓ AI Agent</div>
-          <ul class="text-sm space-y-1 ml-4 list-disc">
-            <li>CrewAI Router/QA/Verification</li>
-            <li>Chroma 137k 청크 적재 (삼성·현대차)</li>
-            <li>CRAG 1회 재검색</li>
-            <li>DART 재무 + ECOS 거시 합성</li>
+            <li>대상: 삼성전자(00126380) · 현대자동차(00164742)</li>
+            <li>정기보고서 32건 (삼성 16 + 현대 16, 2021.12~2025.11)</li>
+            <li>corpus 청크: <strong>67,023</strong> (삼성 23,444 + 현대 43,579)</li>
+            <li>summary 요약: <strong>1,188</strong> (삼성 380 + 현대 808)</li>
+            <li>Chroma 디스크 약 1GB · cosine</li>
           </ul>
         </div>
       </div>
@@ -381,20 +395,34 @@ docker run -d --name gongsi-pg -p 5432:5432 \
   -e POSTGRES_DB=gongsitoktok \
   -v gongsi-pg-data:/var/lib/postgresql/data postgres:16
 
-# 2. Spring 백엔드 (port 8080)
+# 2. Spring 백엔드 (port 8080) — gongsitoktok-spring
 cd gongsitoktok-spring
 ./gradlew bootRun --args='--spring.profiles.active=dev'
 
-# 3. FastAPI AI Agent (port 8000)
-cd gongsitoktok-fastapi
-source .venv/bin/activate
-uvicorn app.main:app --port 8000
+# 3. AI Agent (port 8000) — gongsitoktok-pydantic
+cd gongsitoktok-pydantic
+python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
+# (선택) 코퍼스·사전요약 적재: 이미 적재된 경우 스킵
+PYTHONPATH=. .venv/bin/python scripts/ingest_corpus.py --corp 삼성전자
+PYTHONPATH=. .venv/bin/python scripts/build_summaries.py --corp 삼성전자
+# 관찰성(콘솔 trace) 함께 켜기
+OBSERVABILITY=console PYTHONPATH=. .venv/bin/uvicorn app.main:app --port 8000 --reload
 
-# 4. 프론트 (port 5173)
+# 4. 프론트 (port 5173) — gongsitoktok-react
 cd gongsitoktok-react
 npm install &amp;&amp; npm run dev
 
-# 브라우저: http://localhost:5173</code></pre>
+# 브라우저: http://localhost:5173
+# Swagger(AI):  http://localhost:8000/docs
+# Swagger(Spring): http://localhost:8080/swagger-ui.html</code></pre>
+
+      <div class="callout callout-tip">
+        <div class="callout-title">💡 v2.0 빠른 평가 — 서버 없이도 가능</div>
+        <p class="text-sm m-0">AI 파트(gongsitoktok-pydantic) 검증은 <strong>인프로세스</strong>로 돌릴 수 있습니다 — 서버 기동 불필요.
+          <code>PYTHONPATH=. .venv/bin/python -m eval.eval_retrieval</code> (검색·무료·결정적) ·
+          <code>... -m eval.eval_chat</code> (행동) ·
+          <code>... -m eval.run_golden_inproc</code> (회귀 골든셋 14건). 자세한 기준·결과는 <a href="#ch-8-9">§8.9 3계층 eval</a>.</p>
+      </div>
 
       <div class="callout callout-info">
         <div class="callout-title">💡 보고서 사용법</div>
@@ -437,36 +465,40 @@ flowchart TB
     Svc -.-> Cache
   end
 
-  subgraph FastAPI["FastAPI AI Agent (localhost:8000)"]
+  subgraph FastAPI["gongsitoktok-pydantic — FastAPI (localhost:8000, stateless)"]
     direction TB
-    Route["POST /api/v1/chat"]
-    Chat["services.chat<br/>handle_turn()"]
-    subgraph Crew["CrewAI 단발 Crew"]
+    Route["POST /api/v1/chat<br/>X-Trace-Id echo"]
+    Chat["services/chat.py<br/>handle_chat() — 라우팅·병렬·작성·검증"]
+    subgraph Agents["PydanticAI 5-에이전트 (모듈 싱글톤)"]
       direction LR
-      Router["Router<br/>gpt-5.1<br/>intent 분류"]
-      QA["QA<br/>gpt-5.1<br/>retrieve-then-read"]
-      Verify["Verification<br/>o4-mini<br/>grounded_score"]
+      Router["router<br/>gpt-4o-mini<br/>의도·플래그·검색쿼리"]
+      Writer["writer (qa)<br/>gpt-5.1<br/>근거 內 작성"]
+      Summary["summary<br/>gpt-4o-mini<br/>요약 종합"]
+      Verify["verifier<br/>o4-mini<br/>grounded_score"]
     end
-    Rag["RAG<br/>chunker · embedder<br/>vectorstore · rerank"]
-    Chrom[("Chroma 1.2GB<br/>corpus_&lt;corpCode&gt;<br/>137k 청크")]
-    Sqlite[("SQLite<br/>macro_cache")]
-    Route --> Chat --> Crew
-    QA --> Rag --> Chrom
+    Rag["RAG<br/>표-인식 파서 · 청커 · Contextual<br/>임베딩 · 진짜 하이브리드(RRF)"]
+    Chrom[("Chroma ~1GB<br/>corpus_&lt;corp&gt; 67k<br/>summary_&lt;corp&gt; 1,188")]
+    Sqlite[("SQLite<br/>거시 캐시 · standalone 보관")]
+    Logf["Logfire 콘솔<br/>request_span(X-Trace-Id)"]
+    Route --> Chat
+    Chat --> Agents
+    Writer --> Rag --> Chrom
     Verify -.-> Chat
     Chat -.-> Sqlite
+    Chat -.-> Logf
   end
 
   subgraph External["외부 API"]
-    Dart["DART OpenAPI<br/>공시 본문 + 재무 (fnlttSinglAcnt)"]
+    Dart["DART OpenAPI<br/>공시 본문 + 정형재무 (fnlttSinglAcnt)"]
     Ecos["한국은행 ECOS<br/>환율 · 기준금리 · 국고채 · KOSPI"]
-    OpenAI["OpenAI<br/>gpt-5.1 / o4-mini<br/>text-embedding-3-small"]
+    OpenAI["OpenAI<br/>gpt-5.1 · gpt-4o-mini · o4-mini<br/>text-embedding-3-small"]
   end
 
   Browser -- "Bearer JWT<br/>+ httpOnly Refresh 쿠키" --> Sec
-  Svc -- "WebClient .block()<br/>X-Trace-Id 자동 전파" --> Route
-  Crew -- "litellm 라우팅" --> OpenAI
+  Svc -- "WebClient .block() 동기 JSON<br/>X-Trace-Id 자동 전파" --> Route
+  Agents -- "provider 네이티브" --> OpenAI
   Rag -- "ingest 시점 (수동)" --> Dart
-  Chat -- "실시간" --> Dart
+  Chat -- "정형재무 실시간" --> Dart
   Chat -- "캐시 → miss 시" --> Ecos
 
   classDef fe   fill:#dcfce7,stroke:#14532d,color:#14532d
@@ -476,14 +508,14 @@ flowchart TB
   classDef db   fill:#fff,stroke:#475569,color:#0f172a
   class Browser,Client fe
   class Sec,Ctrl,Svc,Repo,Cache,Spring sb
-  class Route,Chat,Router,QA,Verify,Rag,Crew,FastAPI fa
+  class Route,Chat,Router,Writer,Summary,Verify,Rag,Agents,FastAPI,Logf fa
   class Dart,Ecos,OpenAI,External ext
   class PG,Chrom,Sqlite db
           </pre>
       </div>
 
-      <h3 id="ch-2-2" class="text-xl font-bold text-slate-900 mt-8 mb-3">2.2 인프라 토폴로지 (MVP 1차)</h3>
-      <p>MVP 1차는 로컬 데모 단계입니다. 모든 서비스가 단일 머신에서 단일 인스턴스로 실행됩니다. 운영 진입 시 다중 인스턴스 + 분산 락(ShedLock) + Redis 캐시 이관이 필요합니다 (<a href="#ch-10">Chapter 10</a>).</p>
+      <h3 id="ch-2-2" class="text-xl font-bold text-slate-900 mt-8 mb-3">2.2 인프라 토폴로지 (로컬 데모)</h3>
+      <p>v2.0도 v1과 동일하게 로컬 데모 단계입니다. 모든 서비스가 단일 머신에서 단일 인스턴스로 실행됩니다. 운영 진입 시 다중 인스턴스 + 분산 락(ShedLock) + Redis 캐시 이관이 필요합니다 (<a href="#ch-10">Chapter 10</a>).</p>
 
       <div class="mermaid-card">
           <pre class="mermaid">
@@ -502,9 +534,9 @@ flowchart LR
     subgraph Docker["Docker Desktop"]
       PG[("PostgreSQL 16<br/>gongsi-pg 컨테이너<br/>:5432")]
     end
-    subgraph Files["로컬 파일시스템"]
-      ChromaFS[("./data/chroma<br/>1.2GB")]
-      SqliteFS[("./data/app.db")]
+    subgraph Files["로컬 파일시스템 (gongsitoktok-pydantic/data)"]
+      ChromaFS[("./chroma<br/>~1GB · 67k corpus + 1,188 summary")]
+      SqliteFS[("./app.db<br/>거시 캐시·standalone 보관")]
     end
     SPA -- "HTTP 8080" --> SB
     SB -- "JDBC 5432" --> PG
@@ -779,53 +811,72 @@ erDiagram
       </div>
 
       <!-- ============ 3.3 Chroma 벡터 스토어 ============ -->
-      <h3 id="ch-3-3" class="text-xl font-bold text-slate-900 mt-10 mb-3">3.3 Chroma 벡터 스토어 (FastAPI 단독 소유)</h3>
-      <p>위치: <code>gongsi-agent/data/chroma/</code> (PersistentClient, <code>chroma.sqlite3</code> 431MB + 컬렉션 디렉토리들 = 총 <strong>~1.2GB</strong>). <code>.gitignore</code> 처리됨.</p>
+      <h3 id="ch-3-3" class="text-xl font-bold text-slate-900 mt-10 mb-3">3.3 Chroma 벡터 스토어 (gongsitoktok-pydantic 단독 소유)</h3>
+      <p>위치: <code>gongsitoktok-pydantic/data/chroma/</code> (PersistentClient, cosine, 총 <strong>~1GB</strong>). <code>.gitignore</code> 처리됨. v2.0에서는 <strong>회사별로 2개의 컬렉션을 분리 운영</strong>합니다 — 원문 QA용 <code>corpus_&lt;corp&gt;</code>와 사전요약용 <code>summary_&lt;corp&gt;</code>.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-title">💡 v2.0의 이중 컬렉션 — 왜 분리하나</div>
+        <p class="text-sm m-0">정확수치/QA(<code>corpus</code>)와 요약(<code>summary</code>)은 <strong>요구사항이 다르다</strong>. corpus는 표·정확 인용을 살려야 해 청크가 작고 표를 보존(원문). summary는 섹션 전체를 한 묶음 보고 "이번 보고서의 핵심"을 takeaway로 압축(완성 요약). 같은 컬렉션에 섞으면 정확수치 질문이 요약을 인용하거나 요약 질문이 빈약한 표 청크에 끌려가는 등 <strong>역할 충돌</strong>이 생긴다. 분리하면 라우터가 의도(qa/summary)에 따라 다른 컬렉션을 골라 검색 — 충돌 없음.</p>
+      </div>
 
       <table class="report-table">
         <thead><tr><th>속성</th><th>값</th></tr></thead>
         <tbody>
-        <tr><td><strong>컬렉션 명명 규칙</strong></td><td><code>corpus_&lt;corpCode&gt;</code> — 기업 1개당 1 컬렉션 (회사 격리)</td></tr>
-        <tr><td><strong>임베딩 모델</strong></td><td>OpenAI <code>text-embedding-3-small</code> — 1536 차원</td></tr>
+        <tr><td><strong>컬렉션 명명 규칙</strong></td><td><code>corpus_&lt;corpCode&gt;</code> (원문 청크) · <code>summary_&lt;corpCode&gt;</code> (사전요약). 기업 1개당 2 컬렉션 — 회사·역할 격리</td></tr>
+        <tr><td><strong>임베딩 모델</strong></td><td>OpenAI <code>text-embedding-3-small</code> — 1536 차원, 배치 256</td></tr>
         <tr><td><strong>유사도</strong></td><td>cosine distance → <code>score = 1 - distance</code></td></tr>
-        <tr><td><strong>청크 ID 형식</strong></td><td><code>&lt;rceptNo&gt;-c-&lt;순번&gt;</code> (예: <code>20260310002820-c-0910</code>)</td></tr>
-        <tr><td><strong>Metadata 7 필드</strong></td><td><code>corp_name</code>, <code>rcept_no</code>, <code>rcept_dt</code> (YYYYMMDD), <code>report_nm</code>, <code>pblntf_ty</code> (A/B/C/D/F/I), <code>section_title</code>, <code>order</code></td></tr>
-        <tr><td><strong>적재 배치 크기</strong></td><td>2000 (Chroma 1회 <code>add</code> 한도 ~5461 우회)</td></tr>
-        <tr><td><strong>청킹 정책</strong></td><td><strong>섹션 인식 1차 분할 → 섹션 안에서 슬라이딩 2차 분할</strong>. 단위는 <strong>글자(문자)</strong> — <code>chunk_size=800</code> 글자, <code>overlap=120</code> 글자 (토큰 아님). 표 행·작은 섹션이 각각 쪼개져 사업보고서 1건이 수천~수만 청크로 늘어남 (삼성전자 60,119 / 현대차 77,505)</td></tr>
+        <tr><td><strong>청크 ID 형식</strong></td><td><code>&lt;rceptNo&gt;-&lt;순번 4자리&gt;</code> (예: <code>20250311001085-0025</code>)</td></tr>
+        <tr><td><strong>ChunkMeta 9 필드</strong></td><td><code>corp_code</code> · <code>corp_name</code> · <code>rcept_no</code> · <code>report_nm</code> · <code>rcept_dt</code>(YYYYMMDD) · <code>pblntf_ty</code>(A=정기) · <code>section_title</code>(섹션 경로, <code>&gt;</code> 구분) · <strong><code>kind</code>(<code>text</code>/<code>table</code>)</strong> · <code>order</code></td></tr>
+        <tr><td><strong>적재 배치</strong></td><td>임베딩 256 · Chroma add 2000 (1회 한도 우회)</td></tr>
+        <tr><td><strong>청킹 정책</strong></td><td><strong>표-인식 파싱</strong>(BeautifulSoup) → Block(<code>kind=text|table</code>) → 청킹: <strong>본문</strong>은 섹션 유지 + 슬라이딩 윈도우(<code>chunk_size=800</code>자/<code>overlap=120</code>자), <strong>표</strong>는 통째 1청크, 크면 헤더 반복하며 행 분할(<code>table_max_chars=2400</code>). 단위는 <strong>글자(문자)</strong></td></tr>
+        <tr><td><strong>Contextual 문맥줄</strong></td><td>청크 앞에 <code>[회사 · 공시명 · 섹션경로 · (표 제목) · 종류]</code> 한 줄 prepend 후 임베딩 — Anthropic Contextual Retrieval. 결정적 생성으로 LLM 비용 0</td></tr>
         </tbody>
       </table>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">현재 적재 현황 (MVP 1차)</h4>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">청크 1개 실제 구성 — text/raw_text 분리</h4>
+      <pre><code class="language-text">chunk_id     : "20250311001085-0025"
+text         : "[삼성전자 · 사업보고서(2024.12) · (첨부)연결재무제표 · 연결손익계산서 · 표]\n
+                | 과목 | 주석 | 제 56 (당) 기 |  | 제 55 (전) 기 |  |\n
+                | Ⅰ. 매출액 | 29 |  | 300,870,903 |  | 258,935,494 | ..."   ← 임베딩/BM25 대상
+raw_text     : "| 과목 | ... | Ⅰ. 매출액 | ... 300,870,903 ..."                ← 화면 인용용(문맥줄 제외)
+meta         : ChunkMeta(corp_code=00126380, rcept_no=..., kind=table, ...)</code></pre>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">현재 적재 현황 (v2.0)</h4>
       <table class="report-table">
-        <thead><tr><th>회사</th><th>corpCode</th><th>컬렉션</th><th>청크 수</th><th>적재 기간</th></tr></thead>
+        <thead><tr><th>회사</th><th>corpCode</th><th>정기보고서</th><th><code>corpus_&lt;corp&gt;</code> 청크</th><th><code>summary_&lt;corp&gt;</code> 요약</th></tr></thead>
         <tbody>
-        <tr><td>삼성전자</td><td><code>00126380</code></td><td><code>corpus_00126380</code></td><td>60,119</td><td>2023-06-16 ~ 2026-06-16</td></tr>
-        <tr><td>현대자동차</td><td><code>00164742</code></td><td><code>corpus_00164742</code></td><td>77,505</td><td>2023-06-16 ~ 2026-06-16</td></tr>
-        <tr><td colspan="3"><strong>합계</strong></td><td><strong>137,624 청크</strong></td><td>~1.2GB</td></tr>
+        <tr><td>삼성전자</td><td><code>00126380</code></td><td>16건</td><td>23,444</td><td>380</td></tr>
+        <tr><td>현대자동차</td><td><code>00164742</code></td><td>16건</td><td>43,579</td><td>808</td></tr>
+        <tr><td colspan="2"><strong>합계</strong></td><td><strong>32건</strong> (2021.12~2025.11)</td><td><strong>67,023</strong></td><td><strong>1,188</strong></td></tr>
         </tbody>
       </table>
 
-      <p>적재 대상 보고서 종류: 정기(<code>A</code>) · 주요사항(<code>B</code>) · 발행(<code>C</code>) · 외부감사(<code>F</code>) · 거래소(<code>I</code>) + 선별 지분(<code>D</code> 중 "대량보유"·"최대주주" 만).</p>
+      <p>적재 대상: 정기보고서(<code>pblntf_ty=A</code>) — 사업보고서·반기보고서·분기보고서. v1과 달리 v2.0은 정기보고서에 집중(요약·정확수치·근거 품질이 정기보고서에서 가장 큰 가치).</p>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">검색 흐름 요약</h4>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">검색 흐름 요약 — 진짜 하이브리드 (벡터∪전체 BM25 RRF)</h4>
       <div class="mermaid-card">
           <pre class="mermaid">
 flowchart LR
   Q["사용자 질문<br/>+ Router 가 정제한 search_query"] --> E["OpenAI 임베딩<br/>(1536d)"]
-  E --> CH["Chroma cosine<br/>candidate_k=20<br/>(prefer_recent/날짜필터 시 k*8)"]
-  CH --> F["날짜 후필터<br/>(rcept_dt 사전순 비교)"]
-  F --> KW["keyword fallback<br/>(정량표 도메인 구만)"]
-  KW --> R["rerank_rows<br/>0.28 base + 0.18 lexical<br/>+ 0.10 section + 0.10 phrase<br/>+ 0.46 domain - 0.42 noise"]
-  R --> T["top_k 컷"]
-  T --> G["QA Generator (gpt-5.1)<br/>retrieve-then-read"]
+  E --> V["Chroma 벡터<br/>candidate_k=20<br/>(날짜·kind 필터)"]
+  Q --> B["BM25 전체 코퍼스<br/>(rank-bm25, 지연 캐시)<br/>동일 where 적용"]
+  V --> RRF["RRF 융합<br/>w=0.5/0.5, K=60<br/>score=Σ w/(K+rank)"]
+  B --> RRF
+  RRF --> N["0~1 정규화<br/>(상위=1.0)"]
+  N --> R["rerank<br/>중복제거 · 최신우선"]
+  R --> T["top_k=5"]
+  T --> G["writer (qa)<br/>gpt-5.1<br/>retrieve-then-read"]
   classDef step fill:#fff,stroke:#15803d,color:#14532d
-  class Q,E,CH,F,KW,R,T,G step
+  classDef hl fill:#fef3c7,stroke:#92400e,color:#92400e
+  class Q,E,V,B,RRF,N,R,T,G step
+  class RRF hl
           </pre>
       </div>
+      <p class="text-sm text-slate-500"><strong>가짜 하이브리드(v1):</strong> BM25가 벡터 top-20 안에서만 재랭킹 → 정답이 벡터 밖이면 유실. <strong>진짜 하이브리드(v2.0):</strong> 벡터 top-k와 전체 코퍼스 BM25 top-k의 <strong>합집합</strong>을 RRF로 융합 → 한쪽에만 있어도 생존. 검색 평가에서 must 11/11 hit@5(100%) · MRR 0.923 달성.</p>
 
       <!-- ============ 3.4 SQLite ============ -->
       <h3 id="ch-3-4" class="text-xl font-bold text-slate-900 mt-10 mb-3">3.4 SQLite (FastAPI 보조 저장소)</h3>
-      <p>위치: <code>gongsi-agent/data/app.db</code>. <code>lifespan</code> 부팅 시 <code>db.init_db()</code> 가 스키마 보장.</p>
+      <p>위치: <code>gongsitoktok-pydantic/data/app.db</code>. <code>lifespan</code> 부팅 시 <code>db.init_db()</code> 가 스키마 보장.</p>
 
       <table class="report-table">
         <thead><tr><th>테이블</th><th>상태</th><th>용도</th></tr></thead>
@@ -1246,7 +1297,7 @@ flowchart LR
           <td><strong>OpenAI</strong></td>
           <td>OpenAI</td>
           <td>질의 시점 (모든 LLM 호출)</td>
-          <td><code>gpt-5.1</code> (Router/QA/Summary/Title), <code>o4-mini</code> (Verification), <code>text-embedding-3-small</code> (1536d 임베딩). CrewAI <code>LLM</code> + <code>litellm</code> 라우팅</td>
+          <td><code>gpt-5.1</code> (writer/qa), <code>gpt-4o-mini</code> (router/summary/contextual/macro/section_summary), <code>o4-mini</code> (verifier), <code>text-embedding-3-small</code> (1536d 임베딩). PydanticAI <code>Agent</code> provider-native (litellm 미경유, 모델명 한 줄 교체로 provider 전환)</td>
         </tr>
         </tbody>
       </table>
@@ -1390,7 +1441,7 @@ sequenceDiagram
   participant FC as FastApiChatClient
   participant FA as FastAPI /api/v1/chat
   participant Rag as RAG (Chroma + rerank)
-  participant Crew as CrewAI (gpt-5.1 / o4-mini)
+  participant Crew as PydanticAI (router·writer·verifier)
   participant Per as ChatPersistenceService
 
   U->>CP: 질문 입력 + Enter
@@ -1406,25 +1457,33 @@ sequenceDiagram
   SC->>FC: call(FastApiChatRequest) — WebClient on Virtual Thread
   FC->>FA: POST /api/v1/chat<br/>{ roomId, userSeq, companyContext, messages[1] }
 
-  FA->>Crew: run_router (gpt-5.1)
-  Crew-->>FA: RouterResult { intent, search_query, ... }
+  FA->>Crew: router_agent (gpt-4o-mini)
+  Crew-->>FA: RouterResult { intent, search_query, financial_relevant, macro_relevant, ... }
 
   alt out_of_scope=true
     FA-->>FC: { intent:"out_of_scope", outOfScope:true, answerText:"..." }
   else smalltalk
     FA-->>FC: { intent:"smalltalk", answerText: route.reply }
-  else qa / summary / macro
-    FA->>Rag: search_corpus("corpus_&lt;corp_code&gt;", search_query)
-    Rag-->>FA: top-k chunks + (옵션) 재무·거시 prepend
-    FA->>Crew: run_chat_qa (gpt-5.1, retrieve-then-read)
-    Crew-->>FA: QAResult + citations
-    FA->>Crew: run_verification (o4-mini)
-    Crew-->>FA: VerificationResult { verdict, grounded_score }
-    opt verdict=fail (CRAG 1회)
-      FA->>Rag: 재검색 (top_k×3, 날짜필터 해제)
-      FA->>Crew: run_chat_qa + run_verification 재실행
+  else summary
+    FA->>Rag: search_summaries("summary_&lt;corp&gt;", search_query)
+    Rag-->>FA: 사전요약 top-k (없으면 corpus 폴백)
+    FA->>Crew: summary_agent (gpt-4o-mini)
+    Crew-->>FA: SummaryResult + citations
+  else qa
+    par 병렬 결합 (asyncio.gather, graceful)
+      FA->>Rag: corpus 하이브리드 검색 (벡터∪BM25 RRF)
+    and 재무 (financial_relevant 시)
+      FA->>FA: DART fnlttSinglAcnt — 정확수치 citation prepend
+    and 거시 (macro_relevant 시)
+      FA->>FA: ECOS 환율·금리·국고채·KOSPI
     end
-    FA-->>FC: 200 { intent, answerText, sourceContent, sources[], verification, ... }
+    Rag-->>FA: top-k chunks + 재무·거시 결합 evidence
+    FA->>Crew: qa_agent / writer (gpt-5.1, retrieve-then-read)
+    Crew-->>FA: QAResult (provenance는 코드가 citations[:5]로 고정)
+    FA->>Crew: verifier_agent (o4-mini)
+    Crew-->>FA: VerificationResult { grounded_score }
+    Note over FA: verdict = 코드가 임계값(0.7/0.4)로 확정
+    FA-->>FC: 200 { intent, answerText, sourceContent, sources[], verification, macroSnapshot, ... }
   end
 
   FC-->>SC: FastApiChatResponse
@@ -2396,179 +2455,358 @@ flowchart TD
 
   <section id="ch-8" class="mb-16">
     <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-      <span class="text-brand-600">08</span> FastAPI / AI
+      <span class="text-brand-600">08</span> AI Agent · <code class="text-2xl">gongsitoktok-pydantic</code>
     </h2>
-    <p class="text-slate-500 mb-6">CrewAI 단발 Crew · RAG 7단계 · Verification + CRAG · LLM 매트릭스 · DART ingest · 정량 합성 · 에러 격리</p>
+    <p class="text-slate-500 mb-6">⭐ v2.0 핵심 — PydanticAI 채택 이유 · 5-에이전트 구성도 · 인제스트(표-인식 파싱) · 진짜 하이브리드 검색(RRF) · 사전요약 트랙 · 런타임 시나리오 A/B/C · 정형재무·거시 결합 · 3계층 eval(골든셋) · 모델 매트릭스 · 부분실패 격리</p>
 
     <div class="chapter-card prose-section">
 
-      <!-- ============ 8.1 CrewAI 단발 Crew ============ -->
-      <h3 id="ch-8-1" class="text-xl font-bold text-slate-900 mb-3">8.1 CrewAI 단발 Crew 패턴</h3>
-      <p>FastAPI 측은 OpenDART 공시를 사전 적재한 회사별 코퍼스에서 RAG 검색을 돌리고, CrewAI 멀티 에이전트로 근거·검증 결과를 단일 동기 JSON 으로 반환하는 <strong>무상태(stateless)</strong> 백엔드입니다.</p>
+      <!-- ============ 8.1 PydanticAI 채택 이유 ============ -->
+      <h3 id="ch-8-1" class="text-xl font-bold text-slate-900 mb-3">8.1 PydanticAI 채택 이유 — 왜 CrewAI를 갈아탔나</h3>
+      <p>v1은 <strong>CrewAI 단발 Crew</strong>로 한 가지 일(LLM → 검증된 Pydantic 객체)을 수행했습니다. 그런데 그 일을 위해 <strong>역할극(role/goal/backstory) + Task + Crew</strong>의 무거운 협업 추상화를 매 호출 재생성했고, 결과적으로 "단일에이전트 1번 호출"을 멀티에이전트 협업 프레임워크로 감싸는 안티패턴이 됐습니다. v2.0은 같은 일을 <strong>PydanticAI</strong>로 다시 짰습니다.</p>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">CrewAI 가 무엇인가</h4>
-      <p>Python LLM agent 프레임워크 — <strong>역할별 Agent + Task + Crew</strong> 추상화. LangChain·LangGraph 대비 가볍고 직관적. 내부적으로 <code>litellm</code> 으로 라우팅해서 OpenAI/Anthropic/Gemini 등 멀티 provider 지원.</p>
-
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">왜 단발 Crew 인가</h4>
-      <p>전통 CrewAI 패턴은 "여러 Agent 가 협업 (hierarchical · sequential)" 인데, 공시톡톡은 <strong>역할별 1-Agent Crew 를 순차 호출</strong>합니다. 즉 협업이 아니라 파이프라인.</p>
-
-      <table class="report-table">
-        <thead><tr><th>단계</th><th>역할</th><th>모델</th><th>입력 → 출력</th></tr></thead>
-        <tbody>
-        <tr><td>① Router</td><td>질문 분류 라우터</td><td><code>gpt-5.1</code></td><td>질문 → intent · search_query · macro/financial 관련성 · 날짜 범위</td></tr>
-        <tr><td>② QA</td><td>공시 질의응답 전문가</td><td><code>gpt-5.1</code></td><td>retrieved chunks + history + 질문 → answer + citations</td></tr>
-        <tr><td>③ Verification</td><td>답변 검증관</td><td><code>o4-mini</code></td><td><code>answer</code> + <code>citations</code>(QA 가 실제 인용한 근거만) → <code>grounded_score</code> (0~1) + reason. retrieved 전체가 아니라 LLM 이 채택한 것만 검증 대상</td></tr>
-        <tr><td>(보조) Title</td><td>대화 제목 생성기</td><td><code>gpt-5.1</code></td><td>첫 질문 → 15자 내외 명사형 제목</td></tr>
-        <tr><td>(보조) Summary</td><td>공시 요약 전문가</td><td><code>gpt-5.1</code></td><td>(레거시 — 단건 공시 분석용)</td></tr>
-        </tbody>
-      </table>
-
-      <div class="callout callout-note">
-        <div class="callout-title">🎯 왜 협업이 아니라 파이프라인인가</div>
-        <p class="text-sm m-0">CrewAI 의 hierarchical Crew 는 LLM-as-coordinator 가 sub-agent 들에게 작업을 분배 — 흥미롭지만 예측 가능성이 낮고 비용이 큼. 공시톡톡은 <strong>"분류 → 검색 → 답변 → 검증" 순서가 항상 동일</strong>한 결정적 파이프라인이라 협업이 오히려 오버킬. 각 단계를 코드가 결정적으로 호출 → 디버깅·튜닝 용이.</p>
-      </div>
-
-      <!-- ============ 8.2 RAG 파이프라인 ============ -->
-      <h3 id="ch-8-2" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.2 RAG 파이프라인 — 7단계 (retrieve-then-read)</h3>
-      <p>"retrieve-then-read" 패턴: <strong>검색은 코드가 결정적으로 완료한 뒤, LLM 은 그 결과 안에서만 답변 작성</strong>. CrewAI 의 tool 호출 기반 ReAct 패턴 대신 채택 — LLM 의 quote 환각 차단이 핵심 목적.</p>
-
-      <div class="mermaid-card">
-          <pre class="mermaid">
-flowchart TD
-  Q["사용자 질문<br/>+ Router 가 정제한<br/>search_query"]
-  Q --> S1["① 임베딩<br/>OpenAI text-embedding-3-small<br/>(1536 차원)"]
-  S1 --> S2["② Chroma 벡터 검색<br/>cosine distance<br/>candidate_k=20<br/>(prefer_recent 시 k*8)"]
-  S2 --> S3["③ 날짜 후필터<br/>(rcept_dt 사전순 비교)<br/>Chroma 숫자 비교 미지원 우회"]
-  S3 --> S4["④ Keyword Fallback<br/>(정량표 도메인 구만)<br/>발행주식총수·유통주식수 등"]
-  S4 --> S5["⑤ Rerank<br/>0.28 base + 0.18 lexical<br/>+ 0.10 section + 0.10 phrase<br/>+ 0.46 domain - 0.42 noise"]
-  S5 --> S6["⑥ top-k 컷"]
-  S6 --> S7["⑦ Generator (gpt-5.1)<br/>retrieve-then-read<br/>+ _reconcile() quote 환각 차단"]
-  S7 --> ANS["answer + citations"]
-
-  classDef step fill:#fff,stroke:#15803d,color:#14532d
-  classDef out fill:#dcfce7,stroke:#14532d,color:#14532d
-  class Q,S1,S2,S3,S4,S5,S6,S7 step
-  class ANS out
-          </pre>
-      </div>
-
-      <table class="report-table">
-        <thead><tr><th>단계</th><th>위치</th><th>핵심 동작</th></tr></thead>
-        <tbody>
-        <tr><td>① 임베딩</td><td><code>rag/embedder.py</code></td><td><code>OpenAIEmbedder</code> (100건 배치 처리). <code>BGEM3Embedder</code> 로컬 옵션 (lazy import). 운영 설정은 OpenAI</td></tr>
-        <tr><td>② 벡터 검색</td><td><code>rag/vectorstore.py:search_corpus()</code></td><td>Chroma cosine 검색. <code>candidate_k=20</code>, 날짜/prefer_recent 있으면 k×8 까지 후보 확장</td></tr>
-        <tr><td>③ 날짜 후필터</td><td><code>search_corpus()</code> 내부</td><td>metadata <code>rcept_dt</code> 문자열(YYYYMMDD) 을 Python 에서 사전순 비교 — Chroma 가 숫자 범위 비교 미지원이라 우회</td></tr>
-        <tr><td>④ keyword fallback</td><td><code>_keyword_scan()</code></td><td>정량표 도메인 구(<code>발행주식총수</code>·<code>유통주식수</code>·<code>종속기업</code>·<code>자기주식</code>) 만 정규화 substring 매칭. 일반 질문엔 no-op</td></tr>
-        <tr><td>⑤ rerank</td><td><code>rag/rerank.py:rerank_rows()</code></td><td>회사·연도 하드코딩 없는 일반화 reranker. 도메인 동의어 사전 보유</td></tr>
-        <tr><td>⑥ top-k 컷</td><td><code>search_corpus()</code> 최종</td><td>기본 top_k=5</td></tr>
-        <tr><td>⑦ Generator</td><td><code>agents/crew.py:run_chat_qa()</code></td><td>gpt-5.1, retrieve-then-read. <code>_reconcile()</code> 가 LLM 이 만든 quote 환각 차단 — 검색 결과의 정본만 채택</td></tr>
-        </tbody>
-      </table>
-
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">Keyword Fallback 의 필요성</h4>
-      <p>벡터 검색만으로 <strong>정량표 (발행주식총수·유통주식수 등)</strong> 재현율이 떨어지는 문제 — 표 안의 수치 자체는 의미가 약해서 임베딩 유사도가 낮음. Keyword fallback 으로 도메인 구를 본문에서 직접 substring 스캔 → Hit rate 0.41 → 0.65 개선. 일반 질문에는 no-op 이라 부작용 없음.</p>
-
-      <!-- ============ 8.3 Verification + CRAG ============ -->
-      <h3 id="ch-8-3" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.3 Verification + CRAG (Corrective RAG)</h3>
-      <p>QA 단계가 답변을 만들면, <strong>Verification 단계가 그 답변이 검색 결과에 충실한지 채점</strong>합니다. 채점이 낮으면 CRAG (Corrective RAG) 로 재검색·재답변 한 번 더 시도.</p>
-
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">Verification 동작</h4>
-      <ul>
-        <li>모델: <code>o4-mini</code> (추론 특화)</li>
-        <li><strong>입력</strong>: <code>answer</code> + <code>citations</code>(QA 가 실제 답변에 인용한 근거) — retrieved 전체 후보가 아니라 <strong>QA Agent 가 채택한 것만</strong> 검증 대상 (예: top-8 retrieved 중 LLM 이 3개만 쓰면 그 3개로만 채점)</li>
-        <li>출력: <code>grounded_score</code> (0.0~1.0) + <code>reason</code> + <code>issues</code></li>
-        <li>verdict 결정: <strong>코드가 점수로 재계산</strong> — LLM 의 verdict 자체보단 점수 신뢰</li>
-      </ul>
-
-      <table class="report-table">
-        <thead><tr><th><code>grounded_score</code> 범위</th><th>verdict</th><th>의미</th></tr></thead>
-        <tbody>
-        <tr><td>≥ 0.7</td><td><span class="chip chip-brand">pass</span></td><td>근거 충실 — 그대로 클라이언트 반환</td></tr>
-        <tr><td>0.4 ~ 0.7</td><td><span class="chip chip-amber">partial</span></td><td>일부 근거 부족 — 그대로 반환하되 클라이언트 측 정확도 뱃지로 시각 표시</td></tr>
-        <tr><td>&lt; 0.4</td><td><span class="chip chip-red">fail</span></td><td>CRAG 트리거</td></tr>
-        </tbody>
-      </table>
-
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">CRAG 동작</h4>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">짧은 역사 — 왜 프레임워크가 여러 개인가</h4>
+      <p>LLM 앱 프레임워크는 "무엇이 어려운가"가 바뀌며 진화했습니다.</p>
       <ol>
-        <li>fail 발생 → <strong>1회만</strong> 재시도 (무한 루프 차단)</li>
-        <li>query 를 원문 질문으로 되돌림 (Router 가 정제한 search_query 대신)</li>
-        <li><code>top_k × 3</code> (최소 15) 로 검색 범위 확장</li>
-        <li>날짜 필터 + prefer_recent 해제 — 시간 제약 없이 더 넓은 후보 탐색</li>
-        <li><code>_gather()</code> → <code>_finalize()</code> 재실행</li>
-        <li>여전히 fail → <code>answerText</code> 앞에 <strong>⚠️ 경고문 prepend</strong>: "근거 충실도가 낮은 답변입니다(확인 필요)."</li>
+        <li><strong>LangChain (2022~)</strong> — LLM에 검색·도구·메모리를 붙이는 "부품 상자". RAG 붐을 이끌었으나 추상화 과다로 무거움·추상화 누수 비판.</li>
+        <li><strong>LangGraph (2024~)</strong> — LangChain 팀의 상태 그래프(노드·엣지). 순환·분기·롤백·휴먼인더루프 같은 복잡 워크플로에 강함.</li>
+        <li><strong>CrewAI/AutoGen (2024~)</strong> — 역할극 멀티에이전트. 표현력↑이나 단순 작업엔 과함(v1이 이걸 단일 래퍼로 씀).</li>
+        <li><strong>PydanticAI (2024말~2025)</strong> — Pydantic(파이썬 검증 표준) 팀. "에이전트 = 모델 + 구조화 출력(검증) + 도구/의존성"으로 단순화. 가볍고 타입 안전.</li>
       </ol>
 
-      <div class="callout callout-tip">
-        <div class="callout-title">💡 LLM 의 verdict 보다 점수 우선</div>
-        <p class="text-sm m-0">Verification LLM 이 직접 verdict("pass"/"partial"/"fail") 도 출력하지만 — 코드는 그걸 무시하고 <code>grounded_score</code> 수치만 보고 임계값(0.7/0.4)으로 재계산. <strong>LLM 의 텍스트 verdict 보다 수치가 일관·재현 가능</strong>한 신호이기 때문.</p>
-      </div>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">PydanticAI란 (한 줄)</h4>
+      <p>Pydantic 팀의 <strong>타입세이프 에이전트 프레임워크</strong>. FastAPI가 웹에서 한 일(타입·검증 1급)을 LLM 에이전트에서 한다. 핵심 4가지:</p>
+      <ul>
+        <li><strong>구조화 출력 1급</strong>: <code>Agent(output_type=Model)</code> → LLM 출력을 Pydantic으로 검증, 안 맞으면 자동 재시도.</li>
+        <li><strong>deps(의존성 주입)</strong>: 벡터스토어·설정을 타입 안전하게 주입(<code>RunContext</code>).</li>
+        <li><strong>instructions/tools/model-agnostic</strong>: 시스템 지시·도구·여러 provider를 동일 API로.</li>
+        <li><strong>Logfire 관찰성 1급</strong>(같은 팀) · <strong>pydantic-graph</strong>(복잡 흐름 확장).</li>
+      </ul>
 
-      <!-- ============ 8.4 LLM 모델 매트릭스 ============ -->
-      <h3 id="ch-8-4" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.4 LLM 모델 매트릭스</h3>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">프레임워크 비교 — 왜 PydanticAI를 골랐나</h4>
       <table class="report-table">
-        <thead><tr><th>역할</th><th>모델</th><th>이유</th></tr></thead>
+        <thead><tr><th>프레임워크</th><th>한 줄</th><th>본 프로젝트 적합도</th></tr></thead>
         <tbody>
-        <tr><td>Router</td><td><code>gpt-5.1</code></td><td>구조화된 출력 + 한국어 의도 분류 정확도</td></tr>
-        <tr><td>QA Generator</td><td><code>gpt-5.1</code></td><td>긴 컨텍스트(retrieved chunks + history) 처리 + 한국어 응답 품질</td></tr>
-        <tr><td>Summary</td><td><code>gpt-5.1</code></td><td>(레거시 — 단건 공시 분석용)</td></tr>
-        <tr><td>Title</td><td><code>gpt-5.1</code></td><td>간단한 작업 — 단가 우선이지만 일관성 위해 동일 모델</td></tr>
-        <tr><td><strong>Verification</strong></td><td><code>o4-mini</code></td><td>추론 특화 — 답변과 근거의 정합성 평가에 최적. <code>litellm.drop_params=True</code> + <code>additional_drop_params=["stop"]</code> 로 미지원 파라미터 자동 제거</td></tr>
-        <tr><td>임베딩</td><td><code>text-embedding-3-small</code></td><td>1536 차원, 비용 효율적. <code>text-embedding-3-large</code> (3072d) 대비 90% 품질에 30% 비용</td></tr>
+        <tr><td>LangChain</td><td>부품 상자(통합·RAG)</td><td>부품엔 좋으나 무거움</td></tr>
+        <tr><td>LangGraph</td><td>순서도를 코드로(상태 그래프)</td><td>흐름이 매우 복잡하면 ◎, <strong>우리 규모엔 과함</strong></td></tr>
+        <tr><td><strong>PydanticAI</strong></td><td>타입세이프 에이전트(구조화 출력)</td><td><strong>◎ Pydantic-native · 경량 · 최소 코드</strong></td></tr>
+        <tr><td>CrewAI(v1)</td><td>역할극 팀</td><td>단일 래퍼로 전락 → 가치 0</td></tr>
         </tbody>
       </table>
 
-      <p>모델 호출은 <strong>CrewAI 의 <code>LLM</code> wrapper + 내부 <code>litellm</code> 라우팅</strong>. OpenAI 외에도 Anthropic/Gemini 등으로 provider 전환 시 모델명만 바꾸면 됨. temperature/max_tokens 는 명시 설정 안 함 (CrewAI 기본값 위임).</p>
+      <div class="callout callout-tip">
+        <div class="callout-title">🎯 왜 LangGraph 대비 PydanticAI인가</div>
+        <p class="text-sm m-0">우리 오케스트레이션은 <strong>라우터→검색→작성→검증</strong> + 병렬 결합이고, 분기·병렬은 <strong>평범한 파이썬(<code>if/else</code>, <code>asyncio.gather</code>)으로 충분히 표현됩니다.</strong> LangGraph의 상태 그래프(노드·엣지 선언)는 이 정도 흐름엔 <strong>추상화 과잉</strong>. 반면 매 단계 진짜로 원하는 건 "LLM 출력을 정해진 스키마로 안전하게 받기" — 이게 PydanticAI의 1급 기능(<code>output_type</code> 검증+재시도). 그래서 <strong>흐름은 코드로, 각 호출은 PydanticAI로</strong>가 최소 코드·최대 타입안정의 조합. v1이 이미 Pydantic 결과(<code>RouterResult</code> 등)를 쓰고 있어 교체 비용도 가장 작았음.</p>
+      </div>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">토큰 비용 관리</h4>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">v1(CrewAI) vs v2(PydanticAI) — 정량 비교 (실측)</h4>
+      <table class="report-table">
+        <thead><tr><th>지표</th><th>v1 CrewAI (<code>crew.py</code>)</th><th>v2 PydanticAI (<code>agents.py</code>)</th><th>차이</th></tr></thead>
+        <tbody>
+        <tr><td>에이전트 정의 코드량</td><td>448줄</td><td>144줄</td><td><strong>약 1/3 (−68%)</strong></td></tr>
+        <tr><td>호출(턴)당 생성 객체</td><td>Agent+Task+Crew <strong>3개 재생성</strong></td><td><strong>0개</strong>(모듈 싱글톤 재사용)</td><td>매 호출 객체 생성 제거</td></tr>
+        <tr><td>에이전트 1회 호출 코드</td><td>정의+kickoff+추출 ≈30줄</td><td><code>(await agent.run(prompt)).output</code> <strong>1줄</strong></td><td>호출부 대폭 축소</td></tr>
+        <tr><td>구조화 출력</td><td><code>output_pydantic</code>+수동 <code>_as_pydantic</code></td><td><code>output_type</code> 네이티브 검증+<strong>자동 재시도</strong></td><td>추출 제거 + 재시도 무료</td></tr>
+        <tr><td>LLM 레이어</td><td><code>litellm</code> 경유 (파라미터 수동 제거)</td><td>provider 네이티브</td><td>중간 레이어 1겹 제거</td></tr>
+        <tr><td>의존성 무게</td><td>crewai(litellm 등 무거움)</td><td>pydantic-ai-slim (경량)</td><td>설치·기동 가벼움</td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-slate-500"><strong>핵심:</strong> 같은 일(LLM→검증된 Pydantic 객체)을 <strong>코드 1/3, 호출당 객체 0</strong>으로. 6개 함수가 각각 Agent+Task+Crew를 매 호출 재생성하던 안티패턴이 모듈 1회 정의·재사용으로 바뀐 게 정량 차이의 핵심. (지연·비용은 LLM 호출이 좌우 → 프레임워크 교체로 직접 안 줄지만, <strong>코드·객체·의존성</strong>은 확실히 줄어듦)</p>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">PydanticAI가 공짜로 주는 것 — Spring DI에 비유하면</h4>
+      <table class="report-table">
+        <thead><tr><th>PydanticAI 기능</th><th>Spring 대응</th><th>본 프로젝트 사용처</th><th>없으면 직접 해야 할 일</th></tr></thead>
+        <tbody>
+        <tr><td><strong>구조화 출력 검증+자동 재시도</strong> (<code>output_type</code>)</td><td><code>@Valid</code> + 바인딩</td><td>Router/QA/Summary/Verification <strong>전부</strong></td><td>LLM JSON 파싱·검증·재요청 루프를 매번 수작업</td></tr>
+        <tr><td><strong>의존성 주입</strong> (<code>deps</code>)</td><td>DI (<code>@Autowired</code>)</td><td><code>Deps</code>(벡터스토어·회사 컨텍스트)</td><td>전역/수동 전달로 결합도↑</td></tr>
+        <tr><td><strong>모델 추상화</strong> (provider-agnostic)</td><td>JPA가 DB 가림</td><td><code>"openai:gpt-5.1"</code> → <code>.env</code> 한 줄 교체</td><td>provider별 SDK 분기</td></tr>
+        <tr><td><strong>관찰성 자동 계측</strong> (Logfire)</td><td>Actuator/Micrometer</td><td><code>instrument_pydantic_ai()</code> 한 줄 → 전 에이전트 trace</td><td>호출마다 로깅·타이밍 수동</td></tr>
+        <tr><td><strong>타입 안전·IDE 지원</strong></td><td>정적 타입 체크</td><td><code>resp.intent</code>·<code>resp.citations</code> 자동완성</td><td><code>dict["키"]</code> 추측, 런타임 오류</td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-slate-500"><strong>장점:</strong> LLM→<strong>검증된 타입 객체</strong> 보장 · 모델 교체 자유 · 관찰성 무료 · 기존 스키마 재사용(교체비용 최소). <strong>단점·트레이드오프(정직):</strong> 프레임워크 의존(버전 추종) · 아주 단순한 1회 호출은 SDK 직접이 더 단순할 수도 · 복잡 그래프는 <code>pydantic-graph</code> 학습 · 비교적 신생(자료가 LangChain보다 적음).</p>
+
+      <!-- ============ 8.2 5-에이전트 구성도 ============ -->
+      <h3 id="ch-8-2" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.2 에이전트 구성도 — 5개가 어떻게 협력하나</h3>
+      <p>에이전트는 본 프로젝트의 핵심입니다. <strong>5개 에이전트가 전부 <code>app/agents/agents.py</code> 한 파일에 모듈 레벨로 정의</strong>되고, 각각 <strong>모델 · 출력 스키마(<code>output_type</code>) · 지시문(<code>instructions</code>)</strong> 셋으로 설정됩니다. 말투는 공통 <code>_PERSONA</code> 공유.</p>
+
+      <table class="report-table">
+        <thead><tr><th>에이전트</th><th>모델</th><th><code>output_type</code></th><th>지시문 요지</th><th>_PERSONA</th></tr></thead>
+        <tbody>
+        <tr><td><strong>router</strong></td><td><code>gpt-4o-mini</code></td><td><code>RouterResult</code></td><td>의도 분류 + 검색쿼리 정제 + 재무·거시 플래그 + 기간</td><td>공유</td></tr>
+        <tr><td><strong>writer (qa)</strong></td><td><code>gpt-5.1</code></td><td><code>QAResult</code></td><td>근거 안에서만 답 · 수치 콤마표기 · 기준 모호하면 되묻기</td><td>공유</td></tr>
+        <tr><td><strong>summary</strong></td><td><code>gpt-4o-mini</code></td><td><code>SummaryResult</code></td><td>근거로 서술 요약 · 메타설명/추측 금지</td><td>공유</td></tr>
+        <tr><td><strong>verifier</strong></td><td><code>o4-mini</code></td><td><code>VerificationResult</code></td><td>답이 근거에 충실한지 <code>grounded_score</code> 채점</td><td>제외*</td></tr>
+        <tr><td>section_summary (빌드용)</td><td><code>gpt-4o-mini</code></td><td>(text)</td><td>섹션 1묶음 → takeaway 요약 (사전요약 빌드)</td><td>공유</td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-slate-500">* verifier는 답을 "쓰는" 게 아니라 "채점"만 해서 말투 페르소나 불필요. 모델·임계값은 전부 <code>.env</code>/<code>config.py</code>로 조정.</p>
+
+      <div class="mermaid-card">
+          <pre class="mermaid">
+flowchart TB
+  IN["v2.0 요청<br/>{roomId, userSeq, companyContext, messages}"]
+  IN --> RT["router · gpt-4o-mini<br/>output_type=RouterResult<br/>intent · search_query · 플래그 · 기간"]
+  RT --> BR{intent?}
+
+  BR -->|smalltalk / out_of_scope| QUICK["즉시 응답<br/>근거 불필요"]
+
+  BR -->|summary| SS["summary_&lt;corp&gt; 검색<br/>(완성 요약 top-8)"]
+  SS --> SUMA["summary · gpt-4o-mini<br/>output_type=SummaryResult<br/>요약 조각 종합"]
+
+  BR -->|qa| GATHER["asyncio.gather (병렬, graceful)<br/>━ corpus 하이브리드 검색<br/>━ 정형재무 결합 (financial_relevant 시)<br/>━ 거시 결합 (macro_relevant 시)"]
+  GATHER --> WRITER["writer (qa) · gpt-5.1<br/>output_type=QAResult<br/>근거 안에서만 작성"]
+
+  SUMA --> PROV["provenance 고정<br/>citations[:5] = 코드가 검색한 실제 근거"]
+  WRITER --> PROV
+  PROV --> VER["verifier · o4-mini<br/>output_type=VerificationResult<br/>grounded_score (0~1) 채점"]
+  VER --> VD["verdict = 코드가 임계값(0.7/0.4)로 확정<br/>pass / partial / fail"]
+  VD --> OUT["v2.0 응답<br/>+ contract.to_v2 변환<br/>+ storage.save_chat 보관"]
+  QUICK --> OUT
+
+  classDef agent fill:#fef3c7,stroke:#92400e,color:#92400e
+  classDef code fill:#dbeafe,stroke:#1e3a8a,color:#1e3a8a
+  classDef io fill:#dcfce7,stroke:#14532d,color:#14532d
+  class RT,SUMA,WRITER,VER agent
+  class GATHER,PROV,VD,SS code
+  class IN,OUT,QUICK io
+          </pre>
+      </div>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">관용구 — "모듈 레벨 1회 정의 + retrieve-then-read"</h4>
+      <pre><code class="language-python"># app/agents/agents.py — 모듈 로드 시 1회 생성(재사용)
+_PERSONA = "[역할·말투—공통] 정중한 존댓말 · 서론 없이 본론부터 · 이모지/느낌표 금지 · 사실 중심 …"
+
+def _m(name): return f"openai:{name}"     # 모델명 → provider 경로 (키는 .env)
+
+# 5개 에이전트: 모델 + output_type + (지시문 = _PERSONA + 고유지시)
+router_agent = Agent(_m(_s.router_model),          # gpt-4o-mini
+    output_type=RouterResult,
+    instructions=_PERSONA + "너는 라우터다. 의도(qa/summary/…)·검색쿼리·플래그를 정한다 …")
+
+qa_agent = Agent(_m(_s.qa_model),                  # gpt-5.1
+    output_type=QAResult,
+    instructions=_PERSONA + "너는 공시 분석가다. [근거]만 사용해 답한다. 수치는 콤마 표기 그대로 …")
+
+verifier_agent = Agent(_m(_s.verification_model),  # o4-mini
+    output_type=VerificationResult,
+    instructions="너는 검증자다. 답이 근거에 충실한지 grounded_score를 매긴다 …")  # _PERSONA 없음
+
+# 호출 (app/services/chat.py) — 검색은 코드가 끝내고 근거를 프롬프트로 (retrieve-then-read)
+evidence = format_citations(citations)
+qa = (await qa_agent.run(f"[질문]\n{q}\n\n[근거]\n{evidence}")).output   # → QAResult (검증·자동재시도)</code></pre>
+
+      <div class="callout callout-tip">
+        <div class="callout-title">💡 왜 retrieve-then-read 인가 (에이전트에 "검색 툴"을 안 쥐여줌)</div>
+        <p class="text-sm m-0">에이전트에 검색 툴을 주면 (a) 환각 (b) 비용↑ (c) 비결정성. 검색을 코드가 결정적으로 끝내면 <strong>근거가 고정</strong>돼 재현 가능·저렴(실무 정확성-우선 RAG의 표준). v2.0은 <code>citations[:5]</code>를 <strong>코드가 실제 검색한 근거</strong>로 고정 → 에이전트가 출처를 지어내지 못함.</p>
+      </div>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">verifier — 샘플링 + 임계값으로 결정적</h4>
       <ul>
-        <li><strong>history 최근 10개만 유지</strong> (<code>_MAX_HISTORY=10</code> in <code>contract.py</code>) — 대화가 길어져도 컨텍스트 무한 증가 안 함</li>
-        <li><strong>Summary overview 12,000자 컷</strong> — 레거시 단건 분석 경로</li>
-        <li>token counter 자체는 없음 — Future Work 으로 정밀 비용 추적 검토</li>
+        <li><code>_should_verify</code>로 검증 빈도 제어(<code>verify_sample_rate</code>; 현재 1.0=매 턴 → 프론트 "정확도 %" 항상 표시).</li>
+        <li>verifier는 <code>grounded_score</code>(0~1)만 잘 매기고, <strong>verdict(pass/partial/fail)는 코드가 임계값(0.7/0.4)으로 확정</strong> → 모델 라벨 변동 제거(결정적).</li>
       </ul>
 
-      <!-- ============ 8.5 데이터 ingest ============ -->
-      <h3 id="ch-8-5" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.5 DART 공시 ingest 흐름</h3>
-      <p>진입점: <code>ingest_corpus.py</code>. 수동 실행 (스케줄러·cron 없음). 회사 추가 시 <code>COMPANIES</code> 리스트 수정 → 적재 실행 → Spring <code>tb_company</code> 동기화.</p>
+      <table class="report-table">
+        <thead><tr><th><code>grounded_score</code></th><th>verdict</th><th>의미</th></tr></thead>
+        <tbody>
+        <tr><td>≥ 0.7</td><td><span class="chip chip-brand">pass</span></td><td>근거 충실 — 그대로 반환</td></tr>
+        <tr><td>0.4 ~ 0.7</td><td><span class="chip chip-amber">partial</span></td><td>일부 근거 부족 — 그대로 반환하되 정확도 뱃지로 시각 표시</td></tr>
+        <tr><td>&lt; 0.4</td><td><span class="chip chip-red">fail</span></td><td>"근거 충실도가 낮은 답변입니다" 경고문 prepend</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">공통 페르소나 — 말투 일관성</h4>
+      <p>4개 에이전트가 <code>_PERSONA</code>(정중한 존댓말, 차분한 전문가 톤, 이모지·느낌표·서론 금지, 사실 중심)를 공유해, 모델이 달라도(gpt-5.1·gpt-4o-mini) <strong>한 사람이 말하는 것처럼</strong> 일정합니다. 수치는 출처의 콤마 표기를 그대로 쓰고(조/억 변환 금지), 기수는 근거에 적힌 명칭(제57기 등)을 그대로. 말투를 바꾸려면 <code>_PERSONA</code> 한 곳만 — CrewAI는 backstory가 함수마다 흩어져 일관성 맞추기 어려웠던 게 정량 차이 외의 또 다른 장점.</p>
+
+      <!-- ============ 8.3 인제스트 파이프라인 ============ -->
+      <h3 id="ch-8-3" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.3 인제스트 파이프라인 — 표-인식 파싱이 가장 큰 품질 레버 ★</h3>
+      <p>비싼 비용은 여기 <strong>빌드 1회</strong>에 몰립니다. 런타임은 푼돈. 한국 DART는 PDF/HTML 비중이 커 <strong>원문 파싱 부담이 큼</strong>. 표·주석 추출 품질이 곧 분석 품질이라, ② 표-인식 파싱이 가장 큰 품질 레버입니다.</p>
 
       <div class="mermaid-card">
           <pre class="mermaid">
 flowchart TD
-  Start["ingest_corpus.py 실행"]
-  Start --> A["dart.find_corp_code(name)<br/>회사명 → corpCode 후보"]
-  A --> B["download_corp_codes()<br/>corpcode.json 캐시 활용"]
-  B --> C["collect_targets(corp, bgn, end)<br/>INCLUDE_TYPES = I,B,C,F,A<br/>+ D 중 '대량보유'·'최대주주'만"]
-  C --> Loop{각 공시}
-  Loop --> D1["store.has_disclosure(coll, rcept_no)<br/>중복 적재 방지"]
-  D1 -->|"있음"| Loop
-  D1 -->|"없음"| D2["dart.fetch_document_text(rcept_no)<br/>ZIP → XML 디코딩 (utf-8/cp949/euc-kr)<br/>USERMARK·IMAGE 제거"]
-  D2 --> D3["split_into_chunks(text, 800, 120)<br/>① 섹션 인식 1차 분할<br/>② 섹션 안에서 슬라이딩 2차 분할<br/>(글자 단위 — 토큰 아님)"]
-  D3 --> D4["OpenAI 임베딩<br/>100건 배치"]
-  D4 --> D5["store.index_corpus_disclosure<br/>2000개 배치 단위<br/>(Chroma 1회 add 한도 우회)"]
-  D5 --> Loop
-  Loop -->|"끝"| Done["완료"]
+  Start["scripts/ingest_corpus.py 실행<br/>(--corp 삼성전자)"]
+  Start --> A["dart.list_periodic<br/>정기보고서 목록(pblntf_ty=A)"]
+  A --> B["dart.fetch_document_xml(rcept_no)<br/>ZIP → 태그보존 raw XML<br/>(평문 변환 안 함)"]
+  B --> C["★ parser.parse_document<br/>표-인식 파서 → list[Block]<br/>&lt;TABLE&gt; → Markdown 표 (행·열·COLSPAN 보존)<br/>&lt;P&gt; → 본문, &lt;TITLE&gt;/&lt;SECTION-*&gt; → 섹션 경로<br/>자간 라벨('매 출 액'→'매출액') 정규화"]
+  C --> D["chunker.chunk_blocks → list[Chunk]<br/>본문: 섹션 유지 + 슬라이딩 윈도우(800/120)<br/>표: 통째 1청크, 크면 헤더 반복하며 행 분할(2400)"]
+  D --> E["★ contextual.build_context_line<br/>결정적 문맥줄 prepend<br/>'[회사 · 공시명 · 섹션경로 · (표 제목) · 종류]'"]
+  E --> F["embedder (text-embedding-3-small, batch 256)"]
+  F --> G["vectorstore.index_chunks<br/>corpus_&lt;corp&gt; (Chroma · cosine)"]
+
+  D -.->|"text 청크만 (사전요약 트랙)"| H["summarize.build_summary_chunks<br/>섹션 묶음(가중) → gpt-4o-mini takeaway"]
+  H --> I["임베딩"]
+  I --> J["summary_&lt;corp&gt; 컬렉션 저장"]
 
   classDef step fill:#fff,stroke:#15803d,color:#14532d
-  classDef io fill:#dbeafe,stroke:#1e3a8a,color:#1e3a8a
-  classDef done fill:#dcfce7,stroke:#14532d,color:#14532d
-  class A,B,C,D1,D3,D4,D5,Start,Loop step
-  class D2 io
-  class Done done
+  classDef hl fill:#fef3c7,stroke:#92400e,color:#92400e
+  classDef out fill:#dcfce7,stroke:#14532d,color:#14532d
+  class A,B,D,F,H,I step
+  class C,E hl
+  class G,J out
           </pre>
       </div>
 
-      <p>적재 대상 보고서 종류 (작은 것부터 → 정기보고서 마지막):</p>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">표 보존 — before/after (가장 큰 품질 레버)</h4>
+      <pre><code class="language-text">[v1 CrewAI]  모든 태그를 공백 치환 → 표가 plaintext로 뭉개짐 (행·열 소실)
+   "과목 주석 제56기 매출액 29 300,870,903 258,935,494 매출원가 ..."   ← 어느 숫자가 뭔지 깨짐
+
+[v2 PydanticAI]  표를 표로 보존 (Markdown)
+   | 과목 | 주석 | 제 56 (당) 기 |  | 제 55 (전) 기 |  |
+   | Ⅰ. 매출액 | 29 |  | 300,870,903 |  | 258,935,494 |
+   | Ⅳ. 영업이익 | 29 |  | 32,725,961 |  | 6,566,976 |        ← 행·열 의미 유지, 정확 수치 안착</code></pre>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">결정적 Contextual 문맥줄 — 검색 정확도의 핵심</h4>
+      <p><strong>문제:</strong> 고아 청크("매출 3% 증가")는 어느 회사·기간·섹션인지 임베딩에 안 담겨 검색이 어긋납니다.<br>
+      <strong>해법(Anthropic Contextual Retrieval):</strong> 청크 앞에 문맥 한 줄을 붙여 임베딩.</p>
+      <pre><code class="language-text">형식:  [&lt;회사&gt; · &lt;공시명&gt; · &lt;섹션경로&gt; · (표 제목) · &lt;종류&gt;]
+예:    [삼성전자 · 사업보고서(2024.12) · II. 사업의 내용 &gt; 1. 사업의 개요 · 본문]
+       [삼성전자 · 사업보고서(2024.12) · (첨부)연결재무제표 · 연결손익계산서 · 표]</code></pre>
       <ul>
-        <li><code>I</code> 거래소공시 · <code>B</code> 주요사항보고 · <code>C</code> 발행공시 · <code>F</code> 외부감사관련 · <code>A</code> 정기보고서</li>
-        <li><code>D</code> 지분공시 중 "대량보유" 또는 "최대주주" 포함분만</li>
+        <li><strong>결정적(무료)</strong>: 메타데이터로 템플릿 생성 → LLM 비용 0(<code>ingest/contextual.py::build_context_line</code>).</li>
+        <li>DART는 섹션 계층(I~XII)이 명확해 <code>section_title</code>이 풍부하고, 표 캡션까지 문맥에 넣어 일반 문서보다 유리.</li>
       </ul>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">증분 적재 — 중복 방지</h4>
-      <p><code>store.has_disclosure(coll, rcept_no)</code> 가 이미 적재된 <code>rcept_no</code> 를 체크 — 같은 회사를 재실행해도 새 공시만 적재. 안전한 증분 운영.</p>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">검증 샘플 — 삼성 사업보고서 <code>20250311001085</code></h4>
+      <ul>
+        <li>원문 6.9M자 → 파싱 블록 <strong>2,288</strong> (text 395 / <strong>table 1,893</strong>) → 청크 <strong>2,611</strong> (text 502 / table 2,109)</li>
+        <li>평균 501자/최대 2,497자. 표를 표로 보존하면 청크가 작아지고 정확수치가 깨끗이 안착.</li>
+        <li>골든 핵심 수치 구조 보존: 매출 <strong>300,870,903</strong> · 영업이익 <strong>32,725,961</strong> · 전기 258,935,494 → 모두 표 청크 안에 정확히 위치.</li>
+      </ul>
 
-      <!-- ============ 8.6 정량 데이터 합성 ============ -->
-      <h3 id="ch-8-6" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.6 정량 데이터 합성 — 재무 + 거시</h3>
-      <p>RAG 결과 외에도 Router 가 "financial_relevant" / "macro_relevant" 신호를 주면, <strong>실시간으로 정량 데이터를 가져와 retrieved 결과 앞에 prepend</strong>합니다.</p>
+      <!-- ============ 8.4 진짜 하이브리드 검색 ============ -->
+      <h3 id="ch-8-4" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.4 진짜 하이브리드 검색 — 벡터∪전체 BM25 RRF</h3>
+      <p>벡터(뜻)와 BM25(글자 그대로)를 함께 쓰는 게 하이브리드. v1은 BM25가 벡터 후보 안에서만 재랭킹하는 <strong>가짜 하이브리드</strong>였습니다. v2.0은 벡터 top-k <strong>와</strong> 전체 코퍼스 BM25 top-k의 <strong>합집합</strong>을 RRF로 융합 — 정답이 한쪽에만 있어도 생존합니다.</p>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">BM25는 어떻게 점수를 매기나</h4>
+      <p>"검색어가 이 문서에 얼마나 잘 맞나"를 세 가지로 계산:</p>
+      <ol>
+        <li><strong>단어 빈도(TF)</strong>: 검색어가 많이 나올수록 점수↑(단, 너무 많으면 포화).</li>
+        <li><strong>희소성(IDF)</strong>: 흔한 단어("회사·것")는 가중치↓, 드문 단어(<code>300,870,903</code>·"하만")는 가중치↑.</li>
+        <li><strong>문서 길이 보정</strong>: 긴 문서는 단어가 많은 게 당연 → 길이로 정규화.</li>
+      </ol>
+      <p>→ 한마디로 <strong>"드문 핵심어가 · 짧은 문서에 · 적당히 나오면"</strong> 높은 점수. 그래서 정확 수치·고유명사·티커에 강하고, 벡터(뜻)가 놓치는 <strong>글자 그대로 일치</strong>를 잡습니다.</p>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">RRF 융합 코드 — <code>rag/vectorstore.py</code></h4>
+      <pre><code class="language-python"># 요지
+vec_ids  = coll.query(query_embeddings=[q], n_results=candidate_k, where=...)  # 벡터 후보
+bm25_ids = 전체 코퍼스 BM25 top-k (지연 캐시 인덱스, where 동일 적용)              # 정답이 벡터 밖이어도 포착
+
+# RRF 융합 (bm25_weight=0.5, _RRF_K=60)
+score[id] = (1-w) / (60 + rank_vec) + w / (60 + rank_bm25)
+
+# 0~1 정규화(상위=1.0) → rerank(중복제거 + 최신우선) → top_k</code></pre>
+
+      <table class="report-table">
+        <thead><tr><th>구분</th><th>v1 가짜 하이브리드</th><th>v2 진짜 하이브리드</th></tr></thead>
+        <tbody>
+        <tr><td>BM25 후보 범위</td><td>벡터 top-20 안에서만 재랭킹</td><td><strong>전체 코퍼스</strong>에서 BM25 top-k</td></tr>
+        <tr><td>정답이 벡터 밖이면</td><td>유실</td><td><strong>BM25 쪽에 살아남음</strong> → 융합으로 복원</td></tr>
+        <tr><td>융합 방식</td><td>휴리스틱 reranker(0.28 base + 0.18 lexical + …)</td><td>RRF (<code>1/(60+rank)</code> 합산)</td></tr>
+        <tr><td>가중</td><td>도메인 0.46 · noise -0.42 등 가중치 7개</td><td>동등 가중(0.5/0.5) — 한쪽 묻히지 않게</td></tr>
+        <tr><td>토큰</td><td>일반 토크나이저</td><td>숫자 토큰(<code>300,870,903</code>) 보존</td></tr>
+        <tr><td>날짜·kind 필터</td><td>벡터만</td><td>BM25에도 동일 적용</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip">
+        <div class="callout-title">💡 가중을 동등하게 — 한쪽이 묻히면 하이브리드가 아니다</div>
+        <p class="text-sm m-0">초기 v2에선 RRF 가중을 0.6/0.4(벡터 우대)로 줬더니 "지역별 매출"이 엉뚱한 주주현황을 잡는 버그가 있었음 — 벡터 5개가 BM25 1위보다 높아 <strong>top-5가 순수 벡터</strong>가 됨. 동등 가중(0.5/0.5)로 바꿔 1:1 교차 → 해소. <strong>융합 가중이 한쪽을 묻으면 하이브리드가 아니라 벡터+재랭킹일 뿐.</strong></p>
+      </div>
+
+      <!-- ============ 8.5 사전요약 트랙 ============ -->
+      <h3 id="ch-8-5" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.5 사전요약 트랙 — 비싼 요약은 빌드때 1번</h3>
+      <p>v1은 요약 질문이 들어오면 <strong>매번 corpus에서 실시간 RAG 요약</strong>(우연히 집힌 5청크로). v2.0은 각 공시 섹션을 미리 요약해 <code>summary_&lt;corp&gt;</code> 컬렉션에 저장하고, summary 질문은 그 <strong>완성 요약</strong>을 검색합니다.</p>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">무엇을 기준으로 요약하나 (criteria)</h4>
+      <ol>
+        <li><strong>단위 — 섹션(목차)별</strong>: DART 섹션 계층 단위. micro-섹션은 ~6,000자 묶음으로 합치고 공시 1건당 ~40묶음 상한, 200자 미만 스킵.</li>
+        <li><strong>가중 — 분석 가치 높은 섹션 우선</strong>: 사업의 내용·경영진단(MD&amp;A)·위험·주석·주요계약·연구개발 ↑, 정관·임원명부·계열회사 제외/후순위(<code>summarize._weight</code>). 표는 제외(수치는 RAG/재무).</li>
+        <li><strong>takeaway 지시</strong>: "실제 내용(사업·전략·리스크) 3~6문장, 목차식 메타설명 금지, 정밀 수치 망라 금지(대표 1~2개)" → 요약=서술, 정확수치=corpus/재무로 <strong>역할 분리</strong>.</li>
+      </ol>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">데이터 흐름 — 빌드(생성) → 질의(소비)</h4>
+      <pre><code class="language-text">[빌드 타임 · 1회 ~$1-2]  DART 원문 → 파서(Block) → 섹션 묶음(가중) → gpt-4o-mini 요약
+                       → 임베딩 → summary_&lt;corp&gt; 컬렉션 저장 (corpus와 별개 저장소)
+
+[질의 타임 · summary]   router(intent=summary) → summary_&lt;corp&gt; 벡터검색(완성 요약 top-k)
+                       → summary_agent 종합 → 답 (출처 rcept_no·섹션·dartUrl 유지)
+                       → 사전요약 없으면 기존 corpus 실시간 RAG로 자동 폴백</code></pre>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">"corpus 폴백"이 정확히 하는 일</h4>
+      <p>summary 질문은 항상 <code>summary_&lt;corp&gt;</code>를 <strong>먼저</strong> 뒤지고, 결과가 안 나오면 corpus로 폴백합니다.</p>
+      <ol>
+        <li><strong>언제 발동(정확한 조건)</strong> — <code>search_summaries()</code>가 빈 리스트를 돌려줄 때만 = <code>summary_&lt;corp&gt;</code> 컬렉션이 없거나(미빌드) 비었을 때. 벡터 검색은 데이터만 있으면 어떤 질문이든 항상 top-k를 반환하므로, "질문이 안 맞아서"가 아니라 <strong>"그 회사가 아직 사전요약 안 됨"</strong>이 유일한 발동 조건.</li>
+        <li><strong>무엇을 하나</strong> — <code>corpus_&lt;corp&gt;</code>에서 원문 텍스트 청크(<code>kind=text</code>) top-8 검색 → <code>summary_agent</code>에 [근거]로 넣어 <strong>질의 시점에 요약 생성</strong>(= v1의 '실시간 RAG 요약').</li>
+        <li><strong>왜 있나(안전장치)</strong> — 점진 적용용. 새 회사 추가 후 <code>build_summaries</code> 전에도 요약이 안 깨지고 동작.</li>
+        <li><strong>현재 상태</strong> — 삼성·현대 둘 다 빌드돼 폴백은 실제로 안 탐(항상 사전요약). 폴백은 "보험".</li>
+      </ol>
+
+      <table class="report-table">
+        <thead><tr><th>비교</th><th>정상(사전요약 트랙)</th><th>폴백(corpus)</th></tr></thead>
+        <tbody>
+        <tr><td>근거</td><td>이미 만든 <strong>완성 요약</strong> 조각</td><td><strong>원문 텍스트 청크</strong>(요약 안 됨)</td></tr>
+        <tr><td>요약 시점</td><td>빌드때(미리, 1회)</td><td><strong>질의때(즉석, 매번)</strong></td></tr>
+        <tr><td><code>summary_agent</code> 역할</td><td>요약 조각 <strong>종합·정리</strong></td><td>원문에서 <strong>요약 생성</strong></td></tr>
+        <tr><td>속도·비용</td><td>빠름·쌈</td><td>느림·비쌈</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">효과</h4>
+      <table class="report-table">
+        <thead><tr><th>항목</th><th>효과</th></tr></thead>
+        <tbody>
+        <tr><td>요약 품질↑</td><td>섹션 전체를 보고 1번 정성껏 요약(우연히 집은 5청크가 아니라). 빈약한 수치 표에 끌려가던 문제 해소</td></tr>
+        <tr><td>질의 비용↓·속도↑</td><td>비싼 요약은 빌드때, 질의땐 꺼내기만</td></tr>
+        <tr><td>출처 유지</td><td>요약 조각도 rcept_no·섹션·dartUrl 유지 → provenance</td></tr>
+        </tbody>
+      </table>
+
+      <!-- ============ 8.6 런타임 파이프라인 ============ -->
+      <h3 id="ch-8-6" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.6 런타임 파이프라인 — End-to-End 시나리오 A/B/C</h3>
+      <p>한 질문이 들어와 답이 나가기까지 <strong>실제 값으로</strong> 따라갑니다. 질문 종류마다 흐르는 길이 다릅니다.</p>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">시나리오 A — 정확 수치(재무 결합) · "삼성전자 영업이익 알려줘"</h4>
+      <ol>
+        <li><strong>요청</strong> — <code>{roomId, companyContext:{corpCode:"00126380",corpName:"삼성전자"}, messages:[{role:"user",content:"삼성전자 영업이익 알려줘"}]}</code> 도착. <code>X-Trace-Id</code> 있으면 Logfire 루트 span에 바인딩.</li>
+        <li><strong>라우터(gpt-4o-mini)</strong> → <code>RouterResult(intent=qa, financial_relevant=true, search_query="영업이익", out_of_scope=false)</code>. "영업이익"이라 <strong>재무 플래그 ON</strong>.</li>
+        <li><strong>병렬 검색·결합</strong>(<code>asyncio.gather</code>) — ⓐ corpus 하이브리드 검색, ⓑ 재무 결합이 DART <code>fnlttSinglAcnt(00126380)</code> 호출 → 연결 영업이익을 <strong>score=1.0</strong> citation으로 <strong>맨 앞 배치</strong>. quote: <code>"영업이익: 제 57 기 43,601,051,000,000 / 제 56 기 32,725,961,000,000"</code>, rcept_no=실제 접수번호.</li>
+        <li><strong>작성(writer gpt-5.1)</strong> → <code>"삼성전자 영업이익은 제 57 기 43,601,051,000,000원, 제 56 기 32,725,961,000,000원입니다."</code> (페르소나·콤마표기·근거 기수 그대로).</li>
+        <li><strong>provenance 고정 + 검증</strong> — 출처는 코드의 실제 근거(<code>citations[:5]</code>)로 고정. verifier(o4-mini) <code>grounded_score≈1.0</code> → 임계값으로 <strong>verdict=pass</strong>.</li>
+        <li><strong>응답·보관</strong> — <code>contract.to_v2</code>가 <code>answerText</code> + <code>sources[]</code>(rceptNo·dartUrl) + <code>verification{verdict:"pass",groundedScore:1.0}</code>로 변환, SQLite 보관. 프론트는 "정확도 100%"와 출처 카드(+DART 링크) 표시.</li>
+      </ol>
+      <blockquote class="text-sm m-0"><strong>A 흐름:</strong> 질문 → 라우터(qa·재무ON) → <strong>병렬</strong>[corpus + DART 정형재무] → writer → 검증 → 응답. <strong>정확 숫자는 정형 API가 책임.</strong></blockquote>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">시나리오 B — 요약(사전요약 트랙) · "삼성전자 사업 내용 요약해줘"</h4>
+      <ol>
+        <li><strong>라우터</strong> → <code>intent=summary</code>, <code>search_query="사업 내용 반도체 디스플레이"</code>. 재무·거시 플래그 OFF.</li>
+        <li><strong>사전요약 검색</strong> — corpus·재무·거시 안 탐. <code>summary_&lt;삼성&gt;</code>에서 완성 요약 top-8 의미검색("DX/DS/SDC/Harman 부문…"). <em>(없으면 corpus 실시간 RAG 폴백)</em></li>
+        <li><strong>작성(summary gpt-4o-mini)</strong> → 요약 조각 종합 → "삼성전자는 DX·DS·SDC·Harman 등 부문으로 구성되며…"</li>
+        <li><strong>검증·응답·보관</strong> — 출처는 요약 조각(섹션·rcept_no·dartUrl), verdict=pass.</li>
+      </ol>
+      <blockquote class="text-sm m-0"><strong>B 흐름:</strong> 질문 → 라우터(summary) → <strong>summary_&lt;corp&gt; 1번 검색</strong> → writer → 응답. <strong>병렬 결합 없이 빠르고 깔끔</strong>(비싼 요약은 빌드때 끝).</blockquote>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">시나리오 C — 거시 결합 · "요즘 환율·금리 상황에서 삼성 실적 어때?"</h4>
+      <ol>
+        <li><strong>라우터</strong> → <code>intent=qa</code>, <code>financial_relevant=true</code>, <strong><code>macro_relevant=true</code></strong>, <code>search_query="실적 매출 영업이익"</code>.</li>
+        <li><strong>3중 병렬 결합</strong>(<code>asyncio.gather</code>) — ⓐ corpus ⓑ 재무(DART) ⓒ <strong>거시(ECOS)</strong> 동시에. 거시 예: <code>환율 1,535원·기준금리 2.5%·국고채 3.81%·KOSPI…</code> (과거값 날짜 캐시).</li>
+        <li><strong>작성</strong> — 공시 실적 + 거시 스냅샷을 <strong>"같은 시점의 사실"</strong>로 결합(인과 단정은 피함).</li>
+        <li><strong>응답</strong> — <code>macroSnapshot</code> 채워져 거시 표가 함께 노출 + 출처 카드.</li>
+      </ol>
+      <blockquote class="text-sm m-0"><strong>C 흐름:</strong> 질문 → 라우터(qa·재무·<strong>거시</strong>ON) → <strong>3중 병렬</strong>[corpus + 재무 + 거시] → writer → 응답. <strong>거시 브랜치 추가</strong> + <code>macroSnapshot</code> 노출.</blockquote>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">복합·멀티턴 질문 처리</h4>
+      <ol>
+        <li><strong>복합 질문</strong> — 라우터는 <strong>intent 1개 + 플래그</strong>(<code>financial_relevant</code>·<code>macro_relevant</code>)를 정한다. "매출 얼마고 환율 영향은?" → <code>intent=qa</code> + 재무 + 거시 → corpus·재무·거시 병렬 결합해 writer가 통합 답. <strong>한계</strong>: intent가 1개라 "요약+정확수치" 혼합이나 서로 다른 주제 2개 비교는 약함 → 추후 에이전트 쿼리 분해(§15).</li>
+        <li><strong>멀티턴(이전 질문 이어받기)</strong> — 최근 대화(history)를 라우터·writer에 함께 넘긴다. 생략된 주어·지시어("그럼 매출은?")를 직전 맥락으로 해석. <strong>행동 평가 멀티턴 케이스로 검증됨.</strong></li>
+        <li><strong>도중에 다른 트랙으로 전환</strong> — 라우터는 매 턴 새로 분류. 같은 방에서 이전엔 요약, 지금은 정확수치를 물으면 intent·플래그가 그 턴에 맞게 바뀐다(summary→qa). 트랙은 턴마다 독립.</li>
+        <li><strong>상태는 누가 갖나</strong> — AI는 <strong>stateless</strong>. 세션·대화이력은 백엔드가 소유하고 매 요청 <code>messages</code>로 넘김 → 같은 입력에 같은 출력(재현 가능).</li>
+      </ol>
+
+      <!-- ============ 8.7 정형재무·거시 결합 ============ -->
+      <h3 id="ch-8-7" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.7 정형재무·거시 결합 + provenance 고정</h3>
+      <p>매출·영업이익 같은 정확수치는 <strong>RAG가 아니라 DART 정형 API(<code>fnlttSinglAcnt</code>)로 결정적 획득</strong>합니다. 추론 불필요 + 정확. 거시(ECOS)도 마찬가지로 코드가 가져와 근거에 결합합니다.</p>
 
       <table class="report-table">
         <thead><tr><th>데이터</th><th>출처</th><th>시점</th><th>caching</th></tr></thead>
@@ -2577,67 +2815,260 @@ flowchart TD
           <td>재무 6항목<br/>(매출/영업이익/순이익/자산/부채/자본)</td>
           <td>DART <code>fnlttSinglAcnt.json</code><br/>당기/전기/전전기, 연결(CFS) 우선</td>
           <td>질의 시점 (실시간)</td>
-          <td>없음 (DART 응답 자체가 빠름)</td>
+          <td>없음 (DART 응답 빠름. 단 규모 커지면 rcept_no/TTL 캐시 검토 — §10)</td>
         </tr>
         <tr>
           <td>거시 4지표<br/>(환율·기준금리·국고채3년·KOSPI)</td>
           <td>한국은행 ECOS<br/>코드 <code>731Y001</code>·<code>722Y001</code>·<code>817Y002</code>·<code>802Y001</code></td>
           <td>질의 시점 (캐시 miss 시)</td>
-          <td>SQLite <code>macro_cache</code> 일일 캐시 — lookback 14일</td>
+          <td>SQLite <code>macro_cache</code> — 과거값 불변 활용 날짜별 1회 호출</td>
         </tr>
         </tbody>
       </table>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">합성 트릭 — Citation 변환</h4>
-      <p>재무·거시 데이터는 <strong><code>Citation</code> 객체로 변환되어 retrieved 리스트 앞에 prepend</strong>됩니다. 그러면 QA Generator 가 RAG chunk 처럼 자연스럽게 인용 가능.</p>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">합성 트릭 — Citation 변환 + 재무 최우선 배치</h4>
+      <p>재무·거시 데이터는 <strong><code>Citation</code> 객체로 변환되어 retrieved 리스트 앞에 prepend</strong>됩니다. 그러면 writer가 RAG chunk처럼 자연스럽게 인용. <strong>재무 정형수치는 <code>citations[:5]</code>에서 잘리지 않도록 앞에 배치</strong> — 잘리는 사고는 v2 초기에 실제로 났음("현대 매출" 회귀 사고로 추적).</p>
       <ul>
-        <li>재무: <code>chunk_id="fin-&lt;항목&gt;-CFS"</code> (예: <code>fin-매출액-CFS</code>)</li>
-        <li>거시: <code>chunk_id="macro-ecos"</code></li>
+        <li>재무: <code>section_title="정형 재무(DART)"</code>, <code>rcept_no</code>=실제 접수번호 → <strong>DART 원문 링크 클릭 가능</strong></li>
+        <li>거시: <code>chunk_id="macro-ecos"</code> → <code>contract.to_v2()</code>가 <code>sources[]</code>에서 제외하고 <strong><code>macroSnapshot</code>으로만 노출</strong></li>
       </ul>
 
       <div class="callout callout-tip">
-        <div class="callout-title">💡 macro Citation 중복 방지</div>
-        <p class="text-sm m-0"><code>contract.to_v2()</code> 가 <code>chunk_id == "macro-ecos"</code> 인 Citation 을 <code>sources[]</code> 에서 제외하고 <strong><code>macroSnapshot</code> 텍스트로만 노출</strong>. 출처 카드(공시 인용) 와 거시 보조 정보를 시각적으로 분리.</p>
+        <div class="callout-title">💡 provenance 고정 — 환각 차단의 핵심</div>
+        <p class="text-sm m-0">에이전트가 citations를 <strong>지어내지 못하게</strong>, 응답 출처는 <strong>코드가 검색한 실제 근거</strong>(<code>citations[:5]</code>)로 고정. v2 개발 초기 "요약이 자기 문장을 citations로 만들어 순환참조" 버그를 잡고 도입한 규칙. <strong>출처를 에이전트에 맡기지 말 것.</strong></p>
       </div>
 
-      <!-- ============ 8.7 에러 격리 ============ -->
-      <h3 id="ch-8-7" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.7 부분 실패 격리 패턴</h3>
-      <p>여러 LLM 호출·외부 API 호출이 직렬·병렬로 일어나면 <strong>일부 단계 실패가 전체 실패로 번질 위험</strong>. <code>chat.py</code> 는 단계별 try/except 로 부분 실패를 격리하고, <strong>답변 자체를 못 만든 경우만</strong> v2.0 <code>error</code> 필드로 승격합니다.</p>
+      <!-- ============ 8.8 3계층 eval + 골든셋 기준 ============ -->
+      <h3 id="ch-8-8" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.8 3계층 eval — 검색·행동·회귀 골든셋 ★</h3>
+      <p>"좋은 eval이 진짜 버그를 잡는다"가 v2 개발의 핵심 경험. 3계층으로 분리해 비용·결정성을 다르게 갖춥니다. <strong>전부 인프로세스 — 서버 기동 불필요.</strong></p>
+
+      <table class="report-table">
+        <thead><tr><th>계층</th><th>무엇</th><th>비용</th><th>현재 결과 (v2.0)</th></tr></thead>
+        <tbody>
+        <tr>
+          <td>① <strong>검색</strong> (<code>eval_retrieval.py</code>)</td>
+          <td>정답 청크 회수율 hit@k·MRR — 표파싱·하이브리드·Contextual 직접 측정</td>
+          <td><strong>무료·결정적</strong>(LLM 없음)</td>
+          <td>must <strong>11/11 hit@5(100%)</strong> · MRR <strong>0.923</strong></td>
+        </tr>
+        <tr>
+          <td>② <strong>행동</strong> (<code>eval_chat.py</code>)</td>
+          <td>멀티턴·거시결합·표질의·되묻기·스코프비교·숫자신선도</td>
+          <td>LLM (턴당 푼돈)</td>
+          <td><strong>6/6 must + 2 watch</strong></td>
+        </tr>
+        <tr>
+          <td>③ <strong>회귀</strong> (<code>run_golden_inproc.py</code>)</td>
+          <td>14케이스 회귀 스모크 — 인텐트·정확수치·스코프</td>
+          <td>LLM</td>
+          <td><strong>12/12 must + 2 watch</strong></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">골든셋 — 어떤 기준으로 케이스를 구성하나</h4>
+      <p>각 케이스 = <strong>질문(또는 검색쿼리) + 기대(<code>expect</code>) + 중요도(<code>severity</code>)</strong>. JSON 한 줄로 관리.</p>
+      <ul>
+        <li><strong>중요도</strong> — <code>must</code>=하드 통과 기준(하나라도 실패면 FAIL), <code>watch</code>=알려진 약점(미통과 허용·추적용). 합격률은 must로만 집계.</li>
+        <li><strong>선정 원칙</strong> — ①핵심 동작(요약·정확수치·스코프) ②어려운 케이스(멀티턴·거시·표질의·되묻기·비교) ③약점 추적(watch). 삼성·현대 둘 다.</li>
+      </ul>
+
+      <table class="report-table">
+        <thead><tr><th><code>expect</code> assertion</th><th>뜻</th></tr></thead>
+        <tbody>
+        <tr><td><code>intent</code></td><td>라우터 분류가 기대와 같은지</td></tr>
+        <tr><td><code>contains_any</code></td><td>답·근거에 이 문자열 중 하나 포함(키워드/수치)</td></tr>
+        <tr><td><code>has_number</code></td><td>콤마 숫자 토큰 포함(값 미고정 → 신선도) — 정규식 <code>\d{1,3}(,\d{3})+</code></td></tr>
+        <tr><td><code>verdict_not</code></td><td>이 verdict면 실패(예: <code>fail</code> 금지)</td></tr>
+        <tr><td><code>out_of_scope</code>/<code>macro_used</code>/<code>needs_clarification</code>/<code>no_citations</code></td><td>스코프가드/거시결합/되묻기/근거없음(스몰토크) 확인</td></tr>
+        <tr><td><code>expect_any</code>(검색)</td><td>top-k 결과 섹션·인용에 이 문구 있으면 hit (hit@k·MRR)</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">실제 케이스 예시 — 멀티턴 골든</h4>
+      <pre><code class="language-json">{
+  "id": "multiturn-anaphora",
+  "company": {"corpCode": "00126380", "corpName": "삼성전자"},
+  "history": [
+    {"role": "user", "content": "삼성전자 영업이익 알려줘"},
+    {"role": "assistant", "content": "…영업이익은 제57기 43,601,051,000,000원입니다."}
+  ],
+  "question": "그럼 매출액은?",
+  "expect": {"intent": "qa", "has_number": true, "verdict_not": "fail"},
+  "severity": "must"
+}</code></pre>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">검증 코드 — 실제 작동</h4>
+      <pre><code class="language-python"># eval/run_golden_inproc.py — 발췌
+def evaluate(case, resp):
+    exp  = case["expect"]
+    text = resp.answer + " " + " ".join(c.quote for c in resp.citations)   # 답 + 근거 인용
+    if "intent" in exp and resp.intent.value != exp["intent"]:        ...  # intent 불일치 → 실패
+    if "contains_any" in exp and not any(s in text for s in exp["contains_any"]): ...
+    if "verdict_not" in exp and resp.verification.verdict.value == exp["verdict_not"]: ...
+    return (실패사유_없음, 실패사유목록)
+# 각 케이스를 handle_chat()에 넣고 evaluate → PASS/FAIL/WATCH 집계 (서버 불필요)</code></pre>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">전체 케이스 목록 (무엇을 검사했나)</h4>
+      <p>실제 검사한 35개 케이스 전부. ✅=must 통과, 🔶=watch(약점·추적용).</p>
+
+      <h5 class="font-semibold text-slate-700 mt-4 mb-1">① 회귀 골든 — 14건 · must 12/12</h5>
+      <table class="report-table">
+        <thead><tr><th>케이스</th><th>질문</th><th>검사 포인트</th></tr></thead>
+        <tbody>
+        <tr><td>✅ ss-summary-overview</td><td>삼성 회사 개요 요약</td><td>intent=summary · verdict≠fail</td></tr>
+        <tr><td>✅ ss-summary-business</td><td>삼성 사업 내용 요약</td><td>반도체·메모리·DX·DS·하만 중 포함</td></tr>
+        <tr><td>✅ ss-num-revenue</td><td>삼성 연간 매출액</td><td>300,870,903 / 333,605,938</td></tr>
+        <tr><td>✅ ss-num-opincome</td><td>삼성 영업이익</td><td>43,601,051 / 32,725,961</td></tr>
+        <tr><td>✅ ss-num-assets</td><td>삼성 자산총계</td><td>566,942,110 / 514,531,948</td></tr>
+        <tr><td>🔶 ss-route-business-plain</td><td>삼성 무슨 사업 해?</td><td>'요약' 없는 서술 → summary</td></tr>
+        <tr><td>✅ ss-scope-other-company</td><td>SK하이닉스 영업이익</td><td>out_of_scope=true</td></tr>
+        <tr><td>✅ hd-summary-overview</td><td>현대 회사 개요 요약</td><td>intent=summary · verdict≠fail</td></tr>
+        <tr><td>✅ hd-summary-business</td><td>현대 사업 내용 요약</td><td>자동차·전기차·제네시스 등 포함</td></tr>
+        <tr><td>✅ hd-num-revenue</td><td>현대 연간 매출액</td><td>175,231,153</td></tr>
+        <tr><td>✅ hd-num-opincome</td><td>현대 영업이익</td><td>숫자 포함 · verdict≠fail</td></tr>
+        <tr><td>✅ hd-num-liabilities</td><td>현대 부채총계</td><td>숫자 포함 · verdict≠fail</td></tr>
+        <tr><td>🔶 hd-route-business-plain</td><td>현대 무슨 사업 해?</td><td>summary 라우팅</td></tr>
+        <tr><td>✅ hd-scope-other-company</td><td>기아 매출</td><td>out_of_scope=true</td></tr>
+        </tbody>
+      </table>
+
+      <h5 class="font-semibold text-slate-700 mt-4 mb-1">② 행동 — 8건 · must 6/6</h5>
+      <table class="report-table">
+        <thead><tr><th>케이스</th><th>질문</th><th>검사 포인트</th></tr></thead>
+        <tbody>
+        <tr><td>✅ multiturn-anaphora</td><td>(이전:영업이익) "그럼 매출액은?"</td><td>멀티턴—history로 주어 해석, 숫자 답</td></tr>
+        <tr><td>✅ macro-combine</td><td>요즘 환율·금리 상황</td><td>macro_used=true</td></tr>
+        <tr><td>✅ table-segment</td><td>삼성 사업부문 어떻게 나뉘어?</td><td>DX·DS·부문 포함(표-인식)</td></tr>
+        <tr><td>✅ num-freshness-revenue</td><td>현대 매출액</td><td>숫자 포함(값 미고정)</td></tr>
+        <tr><td>✅ smalltalk-thanks</td><td>오 고마워</td><td>intent=smalltalk · 근거없음</td></tr>
+        <tr><td>✅ scope-compare</td><td>삼성 vs SK하이닉스 비교</td><td>out_of_scope=true</td></tr>
+        <tr><td>🔶 clarify-ambiguous</td><td>삼성 이익 얼마야?</td><td>'이익' 모호 → 되묻기(변동 허용)</td></tr>
+        <tr><td>🔶 unanswerable-future</td><td>현대 내년 전망치</td><td>미래 전망 환각 대신 한계</td></tr>
+        </tbody>
+      </table>
+
+      <h5 class="font-semibold text-slate-700 mt-4 mb-1">③ 검색 — 13건 · must 11/11 hit@5(100%)</h5>
+      <table class="report-table">
+        <thead><tr><th>케이스</th><th>검색쿼리</th><th>정답 회수 기대</th></tr></thead>
+        <tbody>
+        <tr><td>🔶 ss-ret-income-revenue</td><td>연결 손익계산서 매출액</td><td>300,870,903 / 손익계산서</td></tr>
+        <tr><td>✅ ss-ret-segment</td><td>사업부문별 매출 DX DS</td><td>DX 부문 / DS 부문 / 부문별</td></tr>
+        <tr><td>✅ ss-ret-business</td><td>주요 사업 메모리 반도체</td><td>DRAM / NAND / 메모리</td></tr>
+        <tr><td>✅ ss-ret-harman</td><td>하만 전장 디지털 콕핏</td><td>Harman / 하만 / 콕핏 / 전장</td></tr>
+        <tr><td>✅ ss-ret-dividend</td><td>배당 정책 결산배당</td><td>배당에 관한 사항 / 배당</td></tr>
+        <tr><td>✅ ss-ret-treasury</td><td>자기주식 취득 처분</td><td>자기주식</td></tr>
+        <tr><td>✅ ss-ret-largest</td><td>최대주주 지분 현황</td><td>최대주주</td></tr>
+        <tr><td>✅ ss-ret-rnd</td><td>연구개발 실적 비용</td><td>연구개발</td></tr>
+        <tr><td>✅ ss-ret-risk</td><td>사업위험 재무위험관리</td><td>위험관리 / 재무위험 / 파생</td></tr>
+        <tr><td>🔶 ss-ret-region</td><td>지역별 매출 미주 유럽</td><td>지역 / 미주 / 유럽 (terse 약점)</td></tr>
+        <tr><td>✅ hd-ret-business</td><td>주요 사업 자동차 제조</td><td>자동차 / 차량 / 사업의 내용</td></tr>
+        <tr><td>✅ hd-ret-dividend</td><td>배당 정책 결산배당</td><td>배당</td></tr>
+        <tr><td>✅ hd-ret-rnd</td><td>연구개발 친환경 전동화</td><td>연구개발 / 친환경 / 전동</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">개발 일지 — eval이 잡은 진짜 버그</h4>
+      <p>코드가 지금 모양인 <strong>이유</strong>는 대개 이 버그들에서 왔습니다.</p>
+      <table class="report-table">
+        <thead><tr><th>증상</th><th>원인</th><th>수정 / 교훈</th></tr></thead>
+        <tbody>
+        <tr><td>청크 폭증(삼성 1건 11.7M자, 임베딩 한계 초과)</td><td>일부 표의 "헤더"가 1.8만자 거대 셀인데 매 조각에 반복</td><td>헤더 비정상이면 반복 끄고 <code>_hard_wrap</code> 강제 분할. <strong>표 분할에 안전장치 필수</strong></td></tr>
+        <tr><td>요약이 일반지식 환각, 출처가 답 문장과 동일</td><td>summary가 근거 대신 자기 문장을 citations로 생성(순환참조)</td><td>provenance를 코드의 실제 근거(<code>citations[:5]</code>)로 고정. <strong>출처를 에이전트에 맡기지 말 것</strong></td></tr>
+        <tr><td>"현대 매출" 정확수치 빠짐(회귀)</td><td>재무 citation을 corpus 뒤에 붙여 <code>citations[:5]</code>에서 잘림</td><td>재무 정형수치 <strong>앞에 배치</strong>. <strong>1급 근거는 순서가 중요</strong></td></tr>
+        <tr><td>"지역별 매출"이 엉뚱한 주주현황을 잡음</td><td>RRF 가중 0.6/0.4라 벡터 5개가 BM25 1위보다 높아 <strong>top-5가 순수 벡터</strong></td><td>동등 가중(0.5)로 1:1 교차. <strong>융합 가중이 한쪽을 묻으면 하이브리드가 아님</strong></td></tr>
+        <tr><td>"삼성<strong>랑</strong> SK 비교"가 out_of_scope 안 걸림</td><td>방 회사가 같이 언급돼 in-scope 오판. 기존 골든은 순수 타사라 못 잡음</td><td>라우터에 <strong>비교 질문</strong> 규칙. <strong>행동 평가(eval)가 이 버그를 잡음</strong></td></tr>
+        <tr><td>답마다 말투·도입부 제각각, 기수 오기</td><td>답 주체 4개가 페르소나 미공유 + 재무 근거에 기수 명칭 없어 추측</td><td>공통 <code>_PERSONA</code> + 재무 quote에 실제 기수(<code>thstrm_nm</code>). <strong>일관성=공유 규칙+근거 명시</strong></td></tr>
+        <tr><td>verifier verdict가 런마다 pass↔fail 변동</td><td>모델이 verdict 라벨을 직접 매겨 비결정적</td><td><code>grounded_score</code>만 받고 <strong>verdict는 코드가 임계값(0.7/0.4)으로 확정</strong></td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-slate-500"><strong>교훈 요약</strong> — ①에이전트엔 "작성"만, 출처·판정은 코드가 고정 ②융합·분할엔 안전장치 ③일관성은 공유 페르소나+근거 명시 ④<strong>좋은 eval이 진짜 버그를 잡는다.</strong></p>
+
+      <!-- ============ 8.9 모델 매트릭스 ============ -->
+      <h3 id="ch-8-9" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.9 모델 매트릭스 · API 비용 절감</h3>
+      <table class="report-table">
+        <thead><tr><th>역할</th><th>모델</th><th>이유</th></tr></thead>
+        <tbody>
+        <tr><td>router (의도 분류)</td><td><code>gpt-4o-mini</code></td><td>분류는 쉬운 작업 → 싼 모델</td></tr>
+        <tr><td>summary (요약 작성)</td><td><code>gpt-4o-mini</code></td><td>서술 요약은 싼 모델로 충분</td></tr>
+        <tr><td>contextual (문맥 생성)</td><td><code>gpt-4o-mini</code></td><td>현재 결정적 문맥 사용, LLM은 선택적</td></tr>
+        <tr><td>macro (거시 결합)</td><td><code>gpt-4o-mini</code></td><td>—</td></tr>
+        <tr><td><strong>writer/qa (답 작성)</strong></td><td><strong><code>gpt-5.1</code></strong></td><td>답 품질이 핵심 → 상위 모델</td></tr>
+        <tr><td><strong>verifier (검증)</strong></td><td><strong><code>o4-mini</code></strong></td><td>근거 채점엔 추론형</td></tr>
+        <tr><td>임베딩</td><td><code>text-embedding-3-small</code></td><td>1536차원, 검색용 비용 효율</td></tr>
+        </tbody>
+      </table>
+      <p>모델명은 전부 <code>.env</code>로 조정 가능. 비용 대부분은 writer(gpt-5.1)에 몰린다(Logfire로 확인).</p>
+
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">API 절약 / 비용 로직</h4>
+      <table class="report-table">
+        <thead><tr><th>기법</th><th>내용</th></tr></thead>
+        <tbody>
+        <tr><td><strong>모델 티어링</strong></td><td>쉬운 일(분류·요약)=gpt-4o-mini, 답=gpt-5.1, 검증=o4-mini. 비용 대부분은 writer에만.</td></tr>
+        <tr><td><strong>retrieve-then-read</strong></td><td>검색은 코드가 결정적으로 — LLM에 검색 툴 안 줌(왕복·토큰 절약, 환각↓).</td></tr>
+        <tr><td><strong>정확수치 = 정형 API</strong></td><td>매출·영업이익은 RAG가 아니라 DART <code>fnlttSinglAcnt</code>로 결정적 획득(LLM 추론 불필요·정확).</td></tr>
+        <tr><td><strong>결정적 Contextual</strong></td><td>문맥줄을 메타로 템플릿 생성 → 인제스트 LLM 비용 0.</td></tr>
+        <tr><td><strong>BM25 인덱스 캐시</strong></td><td>컬렉션별 1회 구축 후 재사용(질의당 재계산 안 함).</td></tr>
+        <tr><td><strong>거시 날짜 캐시</strong></td><td>과거 거시값은 불변 → 날짜당 1회 ECOS 호출 후 SQLite 캐시.</td></tr>
+        <tr><td><strong>verifier 샘플링</strong></td><td><code>verify_sample_rate</code>로 검증 빈도 조절 가능(비용↔정확도% 표시 트레이드오프).</td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-slate-500"><strong>비용 구조:</strong> 큰 돈은 인제스트(빌드 1회)에, 런타임(질문당)은 푼돈. 질문 1건 ≈ ~$0.02–0.05.</p>
+
+      <!-- ============ 8.10 부분실패 격리 + 디렉토리 ============ -->
+      <h3 id="ch-8-10" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.10 부분실패 격리 + 디렉토리 구조</h3>
+      <p>여러 LLM 호출·외부 API 호출이 직렬·병렬로 일어나면 일부 단계 실패가 전체 실패로 번질 위험. <code>services/chat.py</code>의 <code>asyncio.gather</code>는 <strong>부분실패 graceful</strong> — 한 브랜치가 실패해도 나머지로 계속 진행해 답을 만듭니다.</p>
 
       <table class="report-table">
         <thead><tr><th>단계</th><th>실패 시 처리</th><th>v2.0 <code>error</code> 로 승격?</th></tr></thead>
         <tbody>
-        <tr><td>Router 호출</td><td>보수적으로 QA 분기 fallback</td><td>로그만 (<code>router_failed</code>)</td></tr>
-        <tr><td>Financials 추출</td><td>retrieved 에서 재무 prepend 생략</td><td>로그만</td></tr>
-        <tr><td>Macro fetch</td><td>macroSnapshot 비움</td><td>로그만</td></tr>
-        <tr><td>QA Generator</td><td>다음 단계 진행 불가</td><td><strong>승격</strong> — <code>error.code = "INTERNAL_ERROR"</code>, <code>retriable=true</code></td></tr>
-        <tr><td>Verification</td><td>verdict=null 로 두고 진행 (사용자에겐 정확도 미표시)</td><td>로그만</td></tr>
-        <tr><td>CRAG 재시도 실패</td><td>최초 답변 그대로 + ⚠️ 경고문 prepend</td><td>로그만</td></tr>
+        <tr><td>router 호출</td><td>보수적으로 qa 분기 fallback</td><td>로그만</td></tr>
+        <tr><td>재무 결합 (DART)</td><td>citations 앞 재무 prepend 생략, corpus만 진행</td><td>로그만</td></tr>
+        <tr><td>거시 결합 (ECOS)</td><td>macroSnapshot 비움</td><td>로그만</td></tr>
+        <tr><td>writer (qa)</td><td>다음 단계 진행 불가</td><td><strong>승격</strong> — <code>error</code> 필드로 Spring에 중계</td></tr>
+        <tr><td>verifier</td><td>verdict=null로 두고 진행 (사용자에겐 정확도 미표시)</td><td>로그만</td></tr>
         </tbody>
       </table>
 
-      <p>코드: <code>_add_err()</code> 헬퍼가 각 단계 에러를 누적 기록. 응답 변환 시 (<code>contract.to_v2</code>) <code>qa_failed</code> 만 v2.0 <code>error</code> 로 승격, 나머지는 부분 결과로 처리.</p>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">디렉토리 구조 — gongsitoktok-pydantic</h4>
+      <pre><code class="language-text">app/
+  main.py            FastAPI 진입점 (lifespan: DB init · 관찰성)
+  config.py          Settings/get_settings (모델·파라미터·경로)
+  observability.py   Logfire 콘솔 관찰성 + request_span(X-Trace-Id 바인딩)
+  ingest/
+    dart.py          OpenDART (목록·원문XML·정형재무)
+    parser.py        ★ 표-인식 파서 (Block)
+    chunker.py       청킹 (윈도우 · 표 헤더반복)
+    contextual.py    Contextual 문맥줄
+    pipeline.py      회사별 적재 오케스트레이션
+  rag/
+    embedder.py      OpenAI 임베딩 (batch 256)
+    vectorstore.py   ★ Chroma + 전체 BM25 RRF 하이브리드
+    rerank.py        중복제거 + 최신우선
+  agents/
+    agents.py        ★ 5 에이전트 + _PERSONA + format_citations
+    deps.py          Deps (주입)
+  services/
+    chat.py          ★ 런타임 오케스트레이터 (handle_chat)
+    financials.py    재무 결합 (DART 정형)
+    macro.py         거시 결합 (ECOS)
+    contract.py      v2.0 계약 어댑터 (to_internal · to_v2)
+    summarize.py     ★ 사전요약 빌더 (build_summary_chunks)
+  data/ecos.py       한국은행 ECOS 클라이언트
+  api/routes.py      /api/v1/chat · /api/analyses
+  storage/db.py      SQLite (analyses · macro_cache)
+  schemas/           ingest · disclosure · external(v2.0)
+eval/                eval_retrieval · eval_chat · run_golden_inproc + *.json
+scripts/             ingest_corpus · build_summaries · smoke_retrieval · validate_sample
+docs/                AI_프로젝트_종합설명.md · 기술설명_상세.md · 인제스트_설계확정.md ...</code></pre>
 
-      <div class="callout callout-note">
-        <div class="callout-title">📌 Spring 측 응답 분기와의 정합성</div>
-        <p class="text-sm m-0">위 격리 정책 덕분에 Spring 측 <code>handleErrorOrPersist</code> 의 "HTTP 200 + <code>error != null</code>" 분기는 <strong>QA Generator 실패 시에만 발동</strong>. 그 외 부분 실패는 정상 응답으로 흘러가서 영속화 + 클라이언트로 중계. (<a href="#ch-7-7">§7.7 통신 분기</a> 참조)</p>
-      </div>
-
-      <!-- ============ 8.8 자체 명세 문서 ============ -->
-      <h3 id="ch-8-8" class="text-xl font-bold text-slate-900 mt-10 mb-3">8.8 FastAPI 측 자체 명세 문서</h3>
-      <p><code>gongsi-agent/docs/</code> 6종 — Spring 측 명세와는 별개로 AI 팀이 관리하는 합의 문서.</p>
-
-      <table class="report-table">
-        <thead><tr><th>파일</th><th>다루는 내용</th></tr></thead>
-        <tbody>
-        <tr><td><code>API_명세서.md</code></td><td>v2.0 <code>POST /api/v1/chat</code> 정식 계약 — 요청/응답 필드표, 케이스별 예시, error.code 9종</td></tr>
-        <tr><td><code>chat_v2_schema.json</code></td><td>기계판독 JSON Schema (Pydantic 자동 생성)</td></tr>
-        <tr><td><code>DB_명세서.md</code></td><td>AI 소유 저장소(Chroma + SQLite) 정의 + 백엔드 대화 이력 저장 매핑 제안</td></tr>
-        <tr><td><code>FastAPI영역_ChromaDB_AI가동데이터_명세서.md</code></td><td>Vector DB 스키마, 단기 메모리 설계, CrewAI 상태 비영속</td></tr>
-        <tr><td><code>백엔드연동_협의명세서.md</code></td><td>두 팀 합의용 통합본 — API + DB + 인증/네트워크 + 타임아웃 + 회복정책 + 체크리스트</td></tr>
-        <tr><td><code>실행_연동_가이드.md</code></td><td>백엔드 담당자가 FastAPI 띄우고 스모크 테스트하는 단계별 가이드</td></tr>
-        </tbody>
-      </table>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">핵심 config 기본값 (<code>app/config.py</code>)</h4>
+      <pre><code class="language-text">router/summary/contextual/macro = gpt-4o-mini · qa = gpt-5.1 · verifier = o4-mini
+embedding = text-embedding-3-small
+chunk_size 800 · overlap 120 · table_max_chars 2400
+top_k 5 · candidate_k 20 · bm25_weight 0.5 (RRF, _RRF_K=60)
+verify_pass_min 0.7 · verify_partial_min 0.4 · verify_sample_rate 1.0
+summary_top_k 8 · chroma_dir ./data/chroma · sqlite_path ./data/app.db</code></pre>
 
     </div>
   </section>
@@ -2815,7 +3246,7 @@ flowchart LR
         <tr><td>응답 헤더 <code>X-Trace-Id</code> 노출</td><td>✅</td><td>LB·API Gateway 정합 + 프론트 디버깅</td></tr>
         <tr><td>프론트 ErrorPage 표시 + 클립보드 복사</td><td>✅</td><td>사용자가 운영자에게 traceId 만 알려주면 추적 가능</td></tr>
         <tr><td>Spring → FastAPI outbound 헤더 주입</td><td>✅</td><td>WebClient <code>ExchangeFilterFunction</code> 자동</td></tr>
-        <tr><td><strong>FastAPI 내부 로그에 traceId 박힘</strong></td><td>⚠️</td><td>FastAPI 가 <code>X-Trace-Id</code> 헤더 받아 응답에 echo 만 함. 자기 로그 패턴엔 미적용 — <strong>FastAPI 90초 구간 추적 공백</strong></td></tr>
+        <tr><td><strong>FastAPI 내부 추적 (Logfire 콘솔)</strong></td><td>✅ v2.0 신규</td><td><code>gongsitoktok-pydantic</code>이 <code>X-Trace-Id</code>를 <strong>Logfire 루트 span에 바인딩</strong>(<code>observability.py::request_span</code>). 그 아래 router→검색→writer→verifier가 자식 span으로 묶임 — <strong>한 trace로 AI 내부 추론 과정까지 한 번에 추적</strong> (v1의 90초 구간 공백 해소)</td></tr>
         <tr><td>분산 로그 수집 (Loki/ELK)</td><td>❌</td><td>현재 콘솔 로그만. 다중 인스턴스·머신 통합 검색 불가</td></tr>
         <tr><td>분산 트레이싱 (OpenTelemetry/Jaeger)</td><td>❌</td><td>traceId 가 단순 문자열 — span 단위 timeline 시각화 없음</td></tr>
         </tbody>
@@ -2824,7 +3255,7 @@ flowchart LR
       <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">활용 단계별 발전 경로</h4>
       <ol>
         <li><strong>🟢 즉시 활용 가능 (현재)</strong> — 로컬 개발 시 콘솔에서 traceId 로 grep. 사용자 에러 신고 받으면 ErrorPage 의 traceId 클립보드로 받아 로그 검색</li>
-        <li><strong>🟢 FastAPI 측 traceId 로그 정합 (단기 — 코드 ~10줄)</strong> — FastAPI 측 middleware 가 <code>X-Trace-Id</code> 받아 <code>contextvars</code> 에 저장 + uvicorn/python logging formatter 에 박기. 그러면 <strong>한 traceId 로 Spring 로그 + FastAPI 로그 + 내부 RAG·LLM 단계 모두 추적 가능</strong> (현재 90초 구간 공백 해소)</li>
+        <li><strong>✅ v2.0 완료 — FastAPI Logfire 콘솔 통합</strong> — <code>gongsitoktok-pydantic</code>의 <code>observability.py::setup_observability + request_span(X-Trace-Id)</code>가 백엔드 traceId를 루트 span에 바인딩. router/writer/verifier가 자동 자식 span으로 계측(<code>instrument_pydantic_ai()</code> 한 줄). 콘솔에서 한 trace로 모든 단계 timeline 확인. 운영 단계에서 Logfire 클라우드로 전환만 하면 분산 시각화까지 즉시 — 코드 변경 없음</li>
         <li><strong>🟡 분산 로그 시스템 (중기)</strong> — Loki + Promtail + Grafana. <code>logback-spring.xml</code> 의 <code>// TODO(monitoring)</code> 자리에 <code>LogstashEncoder</code> JSON 출력 전환 → Promtail 이 traceId 라벨 자동 파싱 → Grafana 에서 traceId 검색만으로 모든 인스턴스 로그 통합 조회</li>
         <li><strong>🔵 분산 트레이싱 시각화 (장기)</strong> — OpenTelemetry + Jaeger/Zipkin. span 단위 timeline ("FastAPI 90초 중 RAG 2초, LLM 85초, Verification 3초" 같은 분석). 운영 트래픽 패턴 보면서 도입 시점 판단</li>
         <li><strong>🔵 LB/Gateway 가 traceId 부여 (운영 환경)</strong> — 현재 Spring 이 자체 생성. 운영 환경에서는 ALB/Nginx 가 <code>X-Trace-Id</code> 또는 W3C 표준 <code>traceparent</code> 부여 — 사용자 진입부터 같은 traceId 보장. 코드는 이미 수신 처리 가능</li>
@@ -3008,7 +3439,7 @@ flowchart LR
         <tr>
           <td>—</td>
           <td>FastAPI 모니터링 스택</td>
-          <td>FastAPI 측도 OpenTelemetry · Prometheus 미설치. CrewAI 호출 비용 추적도 필요 (LLM 호출당 토큰 사용량)</td>
+          <td>v2.0은 <strong>Logfire 콘솔 모드</strong>로 호출 timeline·토큰은 가시화. 그러나 누적 비용 추적·예산 알람·다중 인스턴스 통합은 Logfire 클라우드 전환 또는 OpenTelemetry/Prometheus 통합 필요</td>
         </tr>
         </tbody>
       </table>
@@ -3081,11 +3512,10 @@ flowchart LR
 
       <p><a href="#ch-9-3">§9.3</a> 의 traceId 전파 인프라가 잠재력 대비 활용도가 낮은 상태. 다음 5단계로 점진 도입 가능.</p>
 
-      <div class="callout callout-info">
-        <div class="callout-title">📌 #20 — FastAPI 측 traceId 로그 정합 (가장 ROI 높음)</div>
-        <p class="text-sm m-0"><strong>현재</strong>: Spring 이 보낸 <code>X-Trace-Id</code> 헤더를 FastAPI <code>chat_v2()</code> 가 받아 응답에 echo 만 함. <strong>FastAPI 자체 로그에는 traceId 가 박히지 않음 → 90초 RAG·LLM 구간이 추적 공백</strong>.<br/>
-          <strong>트리거</strong>: 즉시 (운영 진입 전 권장).<br/>
-          <strong>해결</strong>: FastAPI middleware 가 <code>X-Trace-Id</code> 받아 <code>contextvars.ContextVar</code> 에 저장 → python <code>logging</code> formatter 가 ContextVar 값을 로그 prefix 에 박음. <strong>코드 ~10줄</strong>. 적용 후 Spring 로그 + FastAPI 로그 + 내부 단계 (router/qa/verification) 모두 같은 traceId 로 grep 가능.</p>
+      <div class="callout callout-tip">
+        <div class="callout-title">✅ #20 — FastAPI traceId 정합 (v2.0에서 완료)</div>
+        <p class="text-sm m-0"><strong>v1 상태</strong>: Spring이 보낸 <code>X-Trace-Id</code>를 FastAPI가 받아 응답에 echo만 함 → 90초 구간 추적 공백.<br/>
+          <strong>v2.0 해결</strong>: <code>gongsitoktok-pydantic/app/observability.py</code>의 <code>request_span(X-Trace-Id)</code>가 백엔드 traceId를 <strong>Logfire 루트 span에 바인딩</strong>. <code>instrument_pydantic_ai()</code> 한 줄로 router/writer/verifier가 자동 자식 span으로 계측. 콘솔에서 한 trace로 AI 내부(router→검색→writer→verifier) 단계 timeline 확인 가능 → <strong>v1의 추적 공백 해소</strong>. 운영 단계에서 Logfire 클라우드로 전환만 하면 분산 시각화까지 즉시(코드 변경 없음).</p>
       </div>
 
       <div class="callout callout-info">
@@ -3116,14 +3546,42 @@ flowchart LR
           <strong>해결</strong>: ALB/Nginx 가 <code>X-Trace-Id</code> 또는 W3C 표준 <code>traceparent</code> 부여 — Spring 코드는 이미 수신 처리 가능 (<code>MdcTraceIdFilter</code>). 사용자 브라우저 진입부터 전 구간 동일 traceId 보장.</p>
       </div>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">관측성 발전 순서 — 권장 우선순위</h4>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">관측성 발전 순서 — v2.0 권장 우선순위</h4>
       <ol class="text-sm space-y-1">
-        <li><strong>#20 FastAPI traceId 정합</strong> (코드 ~10줄, 즉시 효과) — 가장 먼저</li>
+        <li>✅ <strong>#20 FastAPI Logfire 통합</strong> — <strong>v2.0에서 완료</strong></li>
         <li><strong>#21 에러 webhook 알림</strong> (Telegram 등) — 운영 진입과 동시</li>
         <li><strong>#22 Loki 분산 로그</strong> — 다중 인스턴스 시점</li>
         <li><strong>#24 LB traceId 부여</strong> — 운영 환경 배포 시</li>
-        <li><strong>#23 OpenTelemetry</strong> — 시각적 분석 필요 시점 (가장 늦게)</li>
+        <li><strong>#23 OpenTelemetry</strong> — 시각적 분석 필요 시점 (Logfire 클라우드 활용도 옵션)</li>
       </ol>
+
+      <!-- ============ 10.4b AI Agent 측 추후 개선 (v2.0 추가) ============ -->
+      <h3 id="ch-10-4b" class="text-xl font-bold text-slate-900 mt-8 mb-3">10.4b AI Agent 측 추후 개선 (v2.0 신규)</h3>
+      <p>gongsitoktok-pydantic 자체 영역의 발전 경로. <a href="#ch-8">8장</a> 본문에서 다룬 내용을 우선순위로 정리.</p>
+
+      <table class="report-table">
+        <thead><tr><th>#</th><th>항목</th><th>가치</th></tr></thead>
+        <tbody>
+        <tr><td>#29</td><td><strong>사전요약 고급화</strong> — 현재 기본(섹션+가중+takeaway). 다음: 변화탐지(직전 보고서 대비 새 위험·가이던스 변경) + 이벤트 트리거(M&amp;A·소송·가이던스) + 토픽 태깅(택소노미/BERTopic)</td><td>"이번 공시의 진짜 새 소식"을 takeaway로 추출</td></tr>
+        <tr><td>#30</td><td><strong>에이전트 쿼리 분해</strong> — 복합/비교 질문을 여러 검색으로 분해(시나리오 D)</td><td>terse·복합질의 약점 해소(현재 watch로 추적 중)</td></tr>
+        <tr><td>#31</td><td>cross-encoder 리랭커 — 휴리스틱(중복제거·최신) → 전용 모델 재정렬</td><td>상위 정확도↑</td></tr>
+        <tr><td>#32</td><td>LLM Contextual(선택) — 결정적 문맥 + 청크별 1문장 상황설명(gpt-4o-mini)</td><td>검색 정밀도 추가↑(비용 변수)</td></tr>
+        <tr><td>#33</td><td>XBRL 정형화 확대 — 재무 결합을 더 많은 계정·재무제표로</td><td>정형 데이터 커버리지</td></tr>
+        <tr><td>#34</td><td><strong>정형재무 캐시</strong> — 라이브 조회에 rcept_no/짧은 TTL 캐시(거시와 일관)</td><td>중복 호출·DART 레이트리밋 대비. 규모 커지면 필수</td></tr>
+        <tr><td>#35</td><td>멀티모달 — 차트·이미지 비전 파싱</td><td>시각 자료 대응</td></tr>
+        <tr><td>#36</td><td>운영 품질 — pytest(결정적 단위), Dockerfile, Logfire 클라우드</td><td>production 하이진</td></tr>
+        <tr><td>#37</td><td>커버리지 확장 — 회사·공시유형(주요사항·발행 등) 추가</td><td>범위 확대</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-warn">
+        <div class="callout-title">⚠️ #34 정형재무 캐시 — 스케일 시 주의</div>
+        <p class="text-sm m-0">정형재무(매출·영업이익 등)는 <strong>런타임에 DART API로 그때그때 조회</strong>합니다(캐시 없음). 정확성·신선도가 핵심이라 의도된 선택이고, 현재 규모(2개사·무료 API·데모)에선 최적. 단 <strong>규모가 커지면</strong>:<br/>
+          ① 중복 호출 — 같은 질문이 반복되면 동일 DART 호출이 매번 나감(거시는 날짜별 캐시하지만 정형재무는 미캐시 — 비대칭)<br/>
+          ② 레이트 리밋 — OpenDART 일 1만건 한도, 질의량↑ 시 소진 가능<br/>
+          ③ 런타임 의존성 — DART 장애 시 재무 답 저하(현재 graceful 부분실패로 완화)<br/>
+          → <strong>개선책</strong>: 거시(macro)와 동일하게 <strong>접수번호(rcept_no) 기준 또는 짧은 TTL 캐시</strong> 적용. 특정 보고서의 확정 수치는 불변이라 캐시가 안전.</p>
+      </div>
 
       <!-- ============ 10.5 미세 보완 ============ -->
       <h3 id="ch-10-5" class="text-xl font-bold text-slate-900 mt-8 mb-3">10.5 미세 보완 (2종)</h3>
@@ -3183,7 +3641,7 @@ flowchart LR
         <tr>
           <td>2</td>
           <td>FastAPI AI Agent</td>
-          <td><code>gongsitoktok-fastapi/gongsi-agent/</code></td>
+          <td><code>gongsitoktok-pydantic/</code></td>
           <td><code>source .venv/bin/activate &amp;&amp; uvicorn app.main:app --port 8000</code></td>
           <td>8000</td>
         </tr>
@@ -3200,7 +3658,7 @@ flowchart LR
       <p>브라우저: <code>http://localhost:5173</code> 접속.</p>
 
       <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">최초 셋업 — FastAPI 가상환경 + 벡터 DB 적재</h4>
-      <pre><code class="language-bash">cd gongsitoktok-fastapi/gongsi-agent
+      <pre><code class="language-bash">cd gongsitoktok-pydantic
 
 # 1. Python 가상환경 (Python 3.11 권장)
 python3.11 -m venv .venv
@@ -3241,7 +3699,7 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
       </table>
       <p><code>me.paulschwarz:spring-dotenv</code> 의존성이 <code>.env</code> 자동 로드. <code>application.yml</code> 의 placeholder 가 <code>.env</code> 값을 받음.</p>
 
-      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">FastAPI (<code>gongsi-agent/.env</code>)</h4>
+      <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">FastAPI (<code>gongsitoktok-pydantic/.env</code>)</h4>
       <table class="report-table">
         <thead><tr><th>키</th><th>용도</th></tr></thead>
         <tbody>
@@ -3277,24 +3735,34 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
           <td>가상 스레드는 평이한 블로킹 코드 그대로 활용. Reactor 학습 곡선·디버깅 부담 회피. <a href="#ch-7-4">§7.4</a></td>
         </tr>
         <tr>
-          <td><strong>CrewAI</strong></td>
-          <td>LangChain / LangGraph / LlamaIndex</td>
-          <td>역할 기반 추상화가 직관적. <code>litellm</code> 으로 multi-provider 자유. 협업 패턴(hierarchical) 대신 단발 Crew 순차 호출 — 결정적 파이프라인 + 디버깅 용이</td>
+          <td><strong>PydanticAI</strong> (v2.0 채택)</td>
+          <td>CrewAI(v1) · LangChain · LangGraph</td>
+          <td>v1 CrewAI는 역할극+Task+Crew 무거움. PydanticAI는 "에이전트 = 모델 + <code>output_type</code> 검증". 우리 흐름(라우터→검색→작성→검증)은 평범한 파이썬으로 충분 → LangGraph 상태그래프는 과잉. <strong>코드 1/3, 호출당 객체 0</strong>. <a href="#ch-8-1">§8.1</a></td>
+        </tr>
+        <tr>
+          <td><strong>표-인식 파싱</strong> (v2.0 추가)</td>
+          <td>모든 태그 공백 치환</td>
+          <td>v1은 표가 plaintext로 뭉개져 정확수치 어긋남. v2.0은 BeautifulSoup으로 <code>&lt;TABLE&gt;</code>→Markdown 보존(행·열·COLSPAN). <strong>가장 큰 품질 레버.</strong> <a href="#ch-8-3">§8.3</a></td>
+        </tr>
+        <tr>
+          <td><strong>진짜 하이브리드(RRF)</strong> (v2.0 변경)</td>
+          <td>v1 가짜 하이브리드(벡터 top-20 안 재랭킹)</td>
+          <td>벡터 top-k와 전체 BM25 top-k의 <strong>합집합</strong>을 RRF로 융합. 정답이 한쪽에만 있어도 생존. 동등 가중(0.5/0.5)로 한쪽이 묻히지 않게. <a href="#ch-8-4">§8.4</a></td>
         </tr>
         <tr>
           <td><strong>retrieve-then-read</strong></td>
           <td>ReAct (LLM tool 호출)</td>
-          <td>LLM tool 호출 시 quote 환각 위험. 검색을 코드가 결정적으로 끝낸 후 LLM 은 결과 안에서만 답변 작성 + <code>_reconcile()</code> 로 정본 검증</td>
+          <td>LLM tool 호출 시 quote 환각 위험. 검색을 코드가 결정적으로 끝낸 후 에이전트는 작성만. provenance는 <code>citations[:5]</code>로 코드가 고정</td>
         </tr>
         <tr>
-          <td><strong>Chroma</strong></td>
-          <td>Pinecone / Weaviate / pgvector</td>
-          <td>로컬 PersistentClient — 무료, 별도 인프라 없음. 단일 머신 MVP 단계 충분. 운영 진입 시 Chroma Server 또는 pgvector 검토 여지</td>
+          <td><strong>Chroma 이중 컬렉션</strong> (v2.0 추가)</td>
+          <td>단일 corpus 컬렉션</td>
+          <td><code>corpus_&lt;corp&gt;</code>(원문 QA) + <code>summary_&lt;corp&gt;</code>(사전요약) 분리. 정확수치·요약 역할 충돌 방지. 사전요약 미빌드 시 corpus 폴백 보험. <a href="#ch-8-5">§8.5</a></td>
         </tr>
         <tr>
-          <td><strong>회사별 격리 컬렉션</strong> (<code>corpus_&lt;corpCode&gt;</code>)</td>
-          <td>단일 컬렉션 + metadata 필터</td>
-          <td>회사 격리로 검색 정확도·재현율 보장. metadata 필터 방식은 회사 수 증가 시 노이즈 증가</td>
+          <td><strong>정확수치 = DART 정형 API</strong></td>
+          <td>RAG로 정확수치 추출</td>
+          <td>매출·영업이익은 <code>fnlttSinglAcnt</code>로 결정적 획득. LLM 추론 불필요. score=1.0으로 citations 맨 앞 배치. <a href="#ch-8-7">§8.7</a></td>
         </tr>
         <tr>
           <td><strong>단일 활성 방 SOFT 정책</strong></td>
@@ -3340,8 +3808,15 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
         <tr><td><strong>rceptNo</strong></td><td>DART 공시 접수번호 (14자리). 한 공시 문서 고유 식별</td></tr>
         <tr><td><strong>RAG</strong></td><td>Retrieval-Augmented Generation — 외부 지식(벡터 DB)을 검색해 LLM 답변의 정확도·근거를 보강하는 패턴</td></tr>
         <tr><td><strong>CRAG</strong></td><td>Corrective RAG — 1차 RAG 답변이 부실하면 재검색·재답변 시도. 공시톡톡은 verification fail 시 1회만</td></tr>
-        <tr><td><strong>CrewAI</strong></td><td>Python LLM agent 프레임워크. 역할별 Agent + Task + Crew 추상화. 내부 <code>litellm</code> 라우팅</td></tr>
-        <tr><td><strong>Chroma</strong></td><td>오픈소스 벡터 DB. <code>PersistentClient</code> 로 로컬 파일 저장. 코사인 유사도 검색</td></tr>
+        <tr><td><strong>PydanticAI</strong></td><td>Pydantic 팀의 타입세이프 에이전트 프레임워크. <code>Agent(output_type=Model)</code>로 LLM 출력을 스키마로 자동 검증·재시도. v2.0 채택</td></tr>
+        <tr><td><strong>BM25</strong></td><td>단어가 글자 그대로 얼마나 잘 맞는지로 순위를 매기는 고전 키워드 검색 알고리즘. TF·IDF·문서길이로 점수 계산. 정확수치·고유명사에 강함</td></tr>
+        <tr><td><strong>RRF</strong> (Reciprocal Rank Fusion)</td><td>여러 검색의 순위를 합쳐 하나로 정렬. <code>score = Σ 1/(60+rank)</code>. 점수 단위가 달라도 공정하게 섞임</td></tr>
+        <tr><td><strong>Contextual Retrieval</strong></td><td>Anthropic 기법 — 청크 앞에 출처 문맥 한 줄을 붙여 임베딩 → 검색 정밀도↑. v2.0은 결정적 템플릿(LLM 비용 0)</td></tr>
+        <tr><td><strong>provenance</strong></td><td>답의 각 문장·수치가 어느 공시·섹션에서 왔는지 끝까지 되짚는 것. 본 프로젝트는 코드가 고정 + 출처 카드 + DART 링크</td></tr>
+        <tr><td><strong>Logfire</strong></td><td>Pydantic 팀이 만든 관찰성 도구. PydanticAI와 native 연동. <code>X-Trace-Id</code>를 루트 span에 바인딩해 에이전트 호출이 자식 span으로 자동 계측</td></tr>
+        <tr><td><strong>Chroma</strong></td><td>오픈소스 벡터 DB. <code>PersistentClient</code>로 로컬 파일 저장. 코사인 유사도 검색</td></tr>
+        <tr><td><strong>골든셋 (golden set)</strong></td><td>정답 기대값을 정해둔 회귀 테스트 케이스 모음. <code>severity=must/watch</code>로 합격 기준 분리</td></tr>
+        <tr><td><strong>hit@k / MRR</strong></td><td>검색 평가 지표 — hit@k=정답이 상위 k개 안에 있나, MRR=정답 순위의 역수 평균(1에 가까울수록 좋음)</td></tr>
         <tr><td><strong>JWT</strong></td><td>JSON Web Token — 자체 서명된 토큰. <code>sub</code>·<code>jti</code>·<code>iat</code>·<code>exp</code> 표준 클레임 + custom 클레임</td></tr>
         <tr><td><strong>Refresh Token rotation</strong></td><td>토큰 갱신 시 옛 토큰 즉시 revoke + 신규 발급. 재사용 시도 = 도난 의심 → 전체 revoke</td></tr>
         <tr><td><strong>Virtual Thread</strong></td><td>Java 21 가상 스레드 — JVM 내부 가벼운 스레드. carrier 스레드 위 multiplexing</td></tr>
@@ -3356,62 +3831,77 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
         </tbody>
       </table>
 
-      <!-- ============ 11.5 v1.0 한계 ============ -->
-      <h3 id="ch-11-5" class="text-xl font-bold text-slate-900 mt-10 mb-3">11.5 본 보고서 v1.0 의 한계</h3>
+      <!-- ============ 11.5 v2.0 한계 ============ -->
+      <h3 id="ch-11-5" class="text-xl font-bold text-slate-900 mt-10 mb-3">11.5 본 보고서 v2.0의 한계</h3>
       <div class="callout callout-warn">
         <div class="callout-title">⚠️ 본 보고서가 다루지 않는 영역</div>
         <ul class="text-sm space-y-1 list-disc ml-4 m-0">
-          <li><strong>테스트 커버리지</strong> — <code>src/test/java/</code> 디렉토리 골격만 있고 <code>.java</code> 파일 0개. MVP 1차 의도된 결정. 운영 진입 시 통합 테스트 필수</li>
-          <li><strong>성능 측정 데이터</strong> — 부하 테스트 미수행. 본 보고서의 모든 수치는 설계 가정·예상치. JMeter / k6 기반 실측 데이터는 향후 버전</li>
-          <li><strong>운영 배포 매뉴얼</strong> — 현재 로컬 데모 단계. Docker Compose · K8s · CI/CD 파이프라인은 운영 진입 시 별도 문서</li>
-          <li><strong>FastAPI 측 모니터링 스택</strong> — 현재 미설치. CrewAI 호출 비용·LLM 토큰 사용량 추적 미구현 (Future Work)</li>
+          <li><strong>테스트 커버리지(Spring)</strong> — <code>gongsitoktok-spring/src/test/java/</code> 디렉토리 골격만 있고 <code>.java</code> 파일 0개. MVP 의도된 결정. 운영 진입 시 통합 테스트 필수</li>
+          <li><strong>AI 단위 테스트(pytest)</strong> — <code>gongsitoktok-pydantic/eval/</code>에 3계층 평가(검색·행동·회귀)는 풍부하나 <code>tests/</code>는 비어 있음. pytest 결정적 단위 테스트는 #36 운영 품질 항목</li>
+          <li><strong>성능 측정 데이터</strong> — 부하 테스트 미수행. 본 보고서의 모든 수치는 설계 가정·실측 mix. JMeter / k6 / locust 기반 정밀 부하 테스트는 향후 버전</li>
+          <li><strong>운영 배포 매뉴얼</strong> — 현재 로컬 데모 단계. Docker Compose · K8s · CI/CD 파이프라인은 운영 진입 시 별도 문서. AI 측 <code>Dockerfile</code> 미작성</li>
+          <li><strong>LLM 비용 정밀 추적</strong> — Logfire 콘솔로 호출별 토큰·비용 가시화는 가능하나 누적 추적·예산 알람은 미구현 (Logfire 클라우드 전환 시 가능)</li>
           <li><strong>OAuth2 운영 적용</strong> — 백엔드 코드 완성, client-id placeholder. provider 별 콘솔 등록·테스트 가이드 별도</li>
+          <li><strong>v1 대비 신규 회사 적재 자동화</strong> — 회사 추가 시 <code>scripts/ingest_corpus.py --corp 이름</code> + <code>build_summaries.py</code> 수동 실행. 스케줄러·CI 자동화는 미구현</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-title">📚 v2.0 핵심 참고 자료</div>
+        <ul class="text-sm space-y-1 list-disc ml-4 m-0">
+          <li><code>gongsitoktok-pydantic/docs/AI_프로젝트_종합설명.md</code> — AI 파트 종합 설명서 (16장, 본 보고서 8장의 원본 소스)</li>
+          <li><code>gongsitoktok-pydantic/docs/기술설명_상세.md</code> — CrewAI ↔ PydanticAI 비교 원본 자료</li>
+          <li><code>gongsitoktok-pydantic/docs/PydanticAI_재구축_종합보고서.md</code> — 재구축 과정 상세 일지</li>
+          <li><code>gongsitoktok-pydantic/docs/인제스트_설계확정.md</code> — 표-인식 파싱·청킹 설계 확정안</li>
+          <li><code>gongsitoktok-pydantic/docs/AI공시요약_효율설계.md</code> — 사전요약 트랙 설계</li>
+          <li><code>gongsitoktok-pydantic/docs/현업_공시분석_방법론.md</code> — AlphaSense·Hebbia 등 실무 production 패턴 비교</li>
+          <li><code>gongsitoktok-pydantic/eval/EVAL_README.md</code> — 3계층 eval 실행·결과 상세</li>
         </ul>
       </div>
 
       <div class="callout callout-info">
         <div class="callout-title">📌 다음 버전 보고서</div>
-        <p class="text-sm m-0">위 한계 항목 보완 + Ch10 Future Work의 운영 진입 필수 5종(#1·#4·#2·#16·#15) 진행 상황 + 실측 성능 데이터 + 운영 배포 매뉴얼 통합. <strong>※ AI 파트 PydanticAI 재구축은 v2.0 보고서로 별도 발행</strong>(<code>report_mvp2.0.html</code>) — 본 v1.0은 CrewAI 시점 산출물로 동결.</p>
+        <p class="text-sm m-0">위 한계 항목 보완 + Ch10 Future Work의 운영 진입 필수 5종 (#1·#4·#2·#16·#15) 진행 상황 + 실측 성능 데이터(JMeter/k6 부하 테스트) + 운영 배포 매뉴얼(Docker Compose·K8s·CI/CD) + AI 측 #29~#37 진행 상황(사전요약 고급화·쿼리 분해·cross-encoder 등) 통합. 현 보고서는 v2.0 PydanticAI 재구축 시점 산출물.</p>
       </div>
 
       <!-- ============ 11.6 발행·수정 이력 ============ -->
       <h3 id="ch-11-6" class="text-xl font-bold text-slate-900 mt-10 mb-3">11.6 발행·수정 이력</h3>
-      <p>본 보고서(v1.0)의 발행·수정 timeline. 보고서 자체의 버전 관리 — Ch10 Future Work나 백엔드 수정내역과는 다른 축.</p>
+      <p>본 보고서(v2.0)와 직전 버전(v1.0)의 발행·수정 timeline. 보고서 자체의 버전 관리 — Ch10 Future Work나 백엔드 수정내역과는 다른 축.</p>
 
       <table class="report-table">
         <thead><tr><th>일자</th><th>버전</th><th>변경 내용</th></tr></thead>
         <tbody>
         <tr>
           <td><strong>2026-06-23</strong></td>
-          <td><span class="chip chip-blue">v2.0 (별도 파일)</span></td>
+          <td><span class="chip chip-brand">v2.0</span></td>
           <td>
-            <strong>v2.0 보고서 발행 — AI 파트 PydanticAI 재구축 반영</strong> · 파일 <code>docs/report_mvp2.0.html</code><br/>
-            <span class="text-sm">Ch8 완전 신규 작성(PydanticAI 채택 이유 · 5-에이전트 구성도 · 표-인식 인제스트 · 진짜 하이브리드 검색 · 사전요약 트랙 · 3계층 eval 골든셋 35건). 본 v1.0은 CrewAI 시점 산출물로 그대로 동결.</span>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>2026-06-23</strong></td>
-          <td><span class="chip chip-brand">v1.0 최종</span></td>
-          <td>
-            <strong>보고서 보강 — 시연용 마무리</strong>
+            <strong>초안 발행 — PydanticAI 재구축 반영</strong><br/>
             <ul class="text-sm space-y-1 list-disc ml-4 mt-1 mb-0">
-              <li><strong>Ch12 Recommended Improvements 신설</strong> — R1~R10 (운영 필수 4 + UX 4 + DX 2). MVP 1차 시점에서 ROI 높은 즉시 작업 정리</li>
-              <li>Ch4.2 6가지 응답 케이스 풍부화 — 압축 표 → 케이스별 callout 카드(응답 JSON + 처리 + 화면 + 설계 의도)</li>
-              <li>Ch9.2 용량·세션 자연 한계 추가 — 30분 idle 한도 + 5계층 한계 표 + 방어 옵션 5종</li>
-              <li>Ch9.3 X-Trace-Id 활용 보강 — 현재 활용 표 + 발전 경로 5단계 + 긴 트랜잭션 추적 의미</li>
-              <li>Ch10.4 #25~#28 추가 — chatStore corpCode 격리 · 챗봇 cancel · prefetch · FastAPI health</li>
-              <li>Ch10.4a 관측성·알림 5종 신설 — #20 FastAPI traceId / #21 webhook / #22 Loki / #23 OTel / #24 LB</li>
-              <li>FastAPI 검수 정정 4건 — 청킹 단위 '글자(문자)' 명시, 섹션 인식 1차+슬라이딩 2차, verification 입력 'answer + citations'(retrieved 전체 아님)</li>
-              <li>파일 경로 변경 — <code>reports/MVP-1.0/report.html</code> → <code>docs/report_mvp1.0.html</code></li>
+              <li><strong>Ch8 완전 신규 작성(8.1~8.10):</strong> PydanticAI 채택 이유(vs CrewAI·LangGraph + 정량 −68%) · 5-에이전트 구성도 · 표-인식 인제스트 · 진짜 하이브리드 검색(RRF) · 사전요약 트랙(이중 컬렉션) · End-to-End 시나리오 A/B/C · 정형재무·거시 결합 · 3계층 eval + 골든셋 35건 · 모델 매트릭스 · 부분실패 격리</li>
+              <li>Ch1 3-tier 다이어그램·스택 표·체크리스트·실행 커맨드 v2.0 반영(67k corpus + 1,188 summary)</li>
+              <li>Ch2 시스템 아키텍처 mermaid에 5-에이전트 + Logfire 추가</li>
+              <li>Ch3 Chroma 이중 컬렉션(corpus + summary) 설명 + 진짜 하이브리드 흐름 다이어그램</li>
+              <li>Ch4 외부 API 모델 매트릭스 갱신 (gpt-5.1/gpt-4o-mini/o4-mini, PydanticAI provider-native)</li>
+              <li>Ch5 시퀀스 다이어그램에 병렬 결합(asyncio.gather)·이중 컬렉션 라우팅 반영</li>
+              <li>Ch9.3 관측성에서 Logfire 통합으로 v1의 90초 추적 공백 해소 명시</li>
+              <li>Ch10 추가: 10.4b AI Agent 추후 개선 9종(#29~#37) + #20 완료 처리</li>
+              <li>Ch11.3 기술 결정 표 갱신 · 11.4 용어집 신규 항목(BM25·RRF·Contextual·Logfire·골든셋·hit@k) · 11.5 v2.0 참고 자료 인덱스 추가</li>
+              <li>레포 명칭 통일: <code>gongsitoktok-react</code> · <code>gongsitoktok-spring</code> · <code>gongsitoktok-pydantic</code></li>
+              <li>v1 파일 본문 중복(같은 내용 2회 복사) 발견 — v2는 깔끔히 단일본으로 발행</li>
             </ul>
           </td>
         </tr>
         <tr>
-          <td>2026-06-21</td>
-          <td><span class="chip chip-slate">v1.0 초안</span></td>
+          <td><strong>2026-06-23</strong></td>
+          <td><span class="chip chip-slate">v1.0 (참고)</span></td>
           <td>
-            <strong>초안 발행</strong> — MVP 1차 완료 시점 종합 산출물 (12장 골격, mermaid 다이어그램, 시퀀스 흐름, CrewAI 단발 Crew + RAG 7단계 + Verification + CRAG, Spring 가상 스레드·Caffeine·JWT Refresh rotation, React zustand+React Query, 데이터 모델·API Reference·NFR·Future Work)
+            v1 보고서 최종 수정 — Ch12 Recommended Improvements 신설 외 (상세: <code>report_mvp1.0.html</code> §11.6 참조)
           </td>
+        </tr>
+        <tr>
+          <td>2026-06-21</td>
+          <td><span class="chip chip-slate">v1.0 (참고)</span></td>
+          <td>v1 보고서 초안 발행 (MVP 1차 완료 시점, CrewAI 기반)</td>
         </tr>
         </tbody>
       </table>
@@ -3419,7 +3909,7 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
       <div class="callout callout-tip">
         <div class="callout-title">📌 버전 정책</div>
         <ul class="text-sm space-y-1 list-disc ml-4 m-0">
-          <li><strong>v1.0</strong>(본 파일 — <code>report_mvp1.0.html</code>) — MVP 1차 완료 시점(CrewAI 기반) 산출물. 동결.</li>
+          <li><strong>v1.0</strong>(<code>report_mvp1.0.html</code>) — MVP 1차 완료 시점(CrewAI 기반) 산출물. 동결.</li>
           <li><strong>v2.0</strong>(<code>report_mvp2.0.html</code>) — AI 파트 PydanticAI 재구축 시점. 현재 활성 보고서.</li>
           <li><strong>v3.0</strong>(예정) — 운영 진입 필수 항목(Ch10 #1·#2·#4·#15·#16) 진행 후 + 실측 성능 + AI #29~#37 진행 + 운영 배포 매뉴얼 통합.</li>
         </ul>
@@ -3519,7 +4009,7 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
         <div class="callout-title">🔵 R9 — README.md 3종 정리 (각 레포)</div>
         <p class="text-sm m-0"><strong>현재</strong>: <code>finance_v2/README.md</code> 만 본격, 프론트 <code>README.md</code> 는 Vite 스캐폴드 기본값 그대로, FastAPI <code>README.md</code> 는 적당히 정리됨.<br/>
           <strong>작업량</strong>: ~2시간 (프론트 README 재작성).<br/>
-          <strong>임팩트</strong>: 새 합류자 onboarding + 본 보고서로 진입 유도 ("자세한 시스템 구조는 reports/MVP-1.0/index.html").<br/>
+          <strong>임팩트</strong>: 새 합류자 onboarding + 본 보고서로 진입 유도 ("자세한 시스템 구조는 reports/MVP-2.0/index.html").<br/>
           <strong>방법</strong>: 프론트 README 에 한 줄 정의 + 실행 명령 + 본 보고서 링크.</p>
       </div>
 
@@ -3563,8 +4053,9 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
   </section>
 
   <footer class="mt-16 pt-8 border-t border-slate-200 text-sm text-slate-400 text-center">
-    <p>공시톡톡 MVP-1.0 종합 시스템 보고서 · 2026-06-21</p>
-    <p class="mt-2">📂 원본 명세: <code>finance_v2/archive/</code> · <code>gongsi-agent/docs/</code></p>
+    <p>공시톡톡 v2.0 종합 시스템 보고서 — PydanticAI 재구축 · 2026-06-23</p>
+    <p class="mt-2">📂 원본 명세: <code>finance_v2/archive/</code> · <code>gongsitoktok-pydantic/docs/AI_프로젝트_종합설명.md</code></p>
+    <p class="mt-1">🔗 레포: <code>gongsitoktok-react</code> · <code>gongsitoktok-spring</code> · <code>gongsitoktok-pydantic</code></p>
   </footer>
 
 </main>
