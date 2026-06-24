@@ -294,6 +294,136 @@
     .shot.placeholder .ph-alt { font-size: 0.8125rem; color: #475569; line-height: 1.55; font-style: italic; }
     .shot figcaption { font-size: 0.8125rem; color: #475569; margin-top: 0.5rem; text-align: center; }
 
+    /* 실제 스크린샷 figure — placeholder 다음에 배치, 1~3장 자동 적응 */
+    .shot.real {
+      margin: 0.5rem 0 1.25rem;
+      padding: 0;
+      border: none;
+      background: none;
+    }
+    .shot.real .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.75rem;
+    }
+    .shot.real .grid img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.625rem;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+      cursor: zoom-in;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .shot.real .grid img:hover {
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+    }
+    .shot.real figcaption {
+      font-size: 0.8125rem;
+      color: #475569;
+      margin-top: 0.6rem;
+      text-align: center;
+    }
+    .shot.real .grid figcaption {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.35rem;
+      font-weight: 500;
+    }
+
+    /* 라이트박스 — vanilla, 이미지 + mermaid SVG 공용 */
+    .mermaid-card { cursor: zoom-in; }
+    .mermaid-card:hover { box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); transition: box-shadow 0.15s; }
+
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.94);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem 2rem;
+      cursor: zoom-out;
+      animation: lbFade 0.15s ease-out;
+    }
+    .lightbox-overlay[hidden] { display: none; }
+    @keyframes lbFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .lightbox-content {
+      max-width: 95vw;
+      max-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+    .lightbox-content img {
+      max-width: 95vw;
+      max-height: 80vh;
+      width: auto;
+      height: auto;
+      display: block;
+      border-radius: 0.625rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    .lightbox-content svg {
+      max-width: 95vw;
+      max-height: 80vh;
+      width: auto;
+      height: auto;
+      background: #fff;
+      border-radius: 0.625rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      padding: 1.25rem;
+    }
+    .lightbox-caption {
+      color: #e2e8f0;
+      font-size: 0.875rem;
+      margin-top: 1.1rem;
+      text-align: center;
+      max-width: 80vw;
+      line-height: 1.55;
+    }
+    .lightbox-caption .hint {
+      display: block;
+      margin-top: 0.4rem;
+      color: #94a3b8;
+      font-size: 0.75rem;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 9999px;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+    }
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.08);
+      transition: all 0.15s;
+    }
+
+    @media print {
+      .lightbox-overlay { display: none !important; }
+      .mermaid-card { cursor: default; }
+    }
+
     /* 사용자 여정 — 단계별 카드 (Ch1.6) */
     .journey { display: grid; gap: 0.75rem; margin: 1rem 0; }
     .journey .step {
@@ -721,7 +851,7 @@ flowchart LR
 
       <div class="mermaid-card">
           <pre class="mermaid">
-flowchart TB
+flowchart LR
   subgraph Client["사용자 브라우저"]
     Browser["React SPA<br/>(localhost:5173)"]
   end
@@ -743,7 +873,7 @@ flowchart TB
     Route["POST /api/v1/chat<br/>X-Trace-Id echo"]
     Chat["services/chat.py<br/>handle_chat() — 라우팅·병렬·작성·검증"]
     subgraph Agents["PydanticAI 5-에이전트 (모듈 싱글톤)"]
-      direction LR
+      direction TB
       Router["router<br/>gpt-4o-mini<br/>의도·플래그·검색쿼리"]
       Writer["writer (qa)<br/>gpt-5.1<br/>근거 內 작성"]
       Summary["summary<br/>gpt-4o-mini<br/>요약 종합"]
@@ -762,6 +892,7 @@ flowchart TB
   end
 
   subgraph External["외부 API"]
+    direction TB
     Dart["DART OpenAPI<br/>공시 본문 + 정형재무 (fnlttSinglAcnt)"]
     Ecos["한국은행 ECOS<br/>환율 · 기준금리 · 국고채 · KOSPI"]
     OpenAI["OpenAI<br/>gpt-5.1 · gpt-4o-mini · o4-mini<br/>text-embedding-3-small"]
@@ -960,75 +1091,81 @@ flowchart LR
       <div class="mermaid-card">
           <pre class="mermaid">
 erDiagram
-  tb_user ||--o{ tb_refresh_token : "1:N"
-  tb_user ||--o{ tb_chat_room     : "1:N"
-  tb_company ||--o{ tb_chat_room  : "1:N"
-  tb_company ||--o| tb_company_main : "1:0..1"
-  tb_chat_room ||--o{ tb_qa_history : "1:N (이력)"
+  tb_user ||--o{ tb_refresh_token : has
+  tb_user ||--o{ tb_chat_room : owns
+  tb_company ||--o{ tb_chat_room : referenced
+  tb_company ||--o| tb_company_main : pinned
+  tb_chat_room ||--o{ tb_qa_history : contains
 
   tb_user {
-    BIGINT       user_seq PK "IDENTITY 영구 불변"
-    VARCHAR_150  user_id UK "로컬 ID 또는 'oauth_PROVIDER_xxx'"
-    VARCHAR_60   password "BCrypt 60자, OAuth는 NULL"
-    VARCHAR_50   nickname
-    ENUM         oauth_service "LOCAL/GOOGLE/KAKAO/NAVER"
-    VARCHAR_255  provider_id "OAuth provider 식별자"
-    BOOLEAN      is_active "false=탈퇴"
-    TIMESTAMP    created_at
-    TIMESTAMP    withdrawn_at "탈퇴 시각"
+    bigint user_seq PK
+    varchar user_id UK
+    varchar password
+    varchar nickname
+    varchar oauth_service
+    varchar provider_id
+    boolean is_active
+    timestamp created_at
+    timestamp withdrawn_at
   }
 
   tb_refresh_token {
-    BIGINT       token_id PK
-    BIGINT       user_seq FK
-    CHAR_64      token_hash UK "SHA-256 hex (원본은 쿠키만)"
-    TIMESTAMP    expires_at "now+14d"
-    TIMESTAMP    revoked_at "rotation/revoke 시 세팅"
-    VARCHAR_255  user_agent
-    TIMESTAMP    created_at
+    bigint token_id PK
+    bigint user_seq FK
+    char token_hash UK
+    timestamp expires_at
+    timestamp revoked_at
+    varchar user_agent
+    timestamp created_at
   }
 
   tb_company {
-    BIGINT       company_seq PK
-    VARCHAR_8    corp_code UK "DART 영구 식별자"
-    VARCHAR_200  corp_name
-    VARCHAR_500  logo_url "nullable"
-    TEXT         summary_content
-    BOOLEAN      is_active "default true"
-    TIMESTAMP    created_at
-    TIMESTAMP    updated_at
+    bigint company_seq PK
+    varchar corp_code UK
+    varchar corp_name
+    varchar logo_url
+    text summary_content
+    boolean is_active
+    timestamp created_at
+    timestamp updated_at
   }
 
   tb_company_main {
-    BIGINT       main_seq PK
-    BIGINT       company_seq FK UK "메인 핀은 회사당 1개"
-    INTEGER      display_order
-    TIMESTAMP    created_at
+    bigint main_seq PK
+    bigint company_seq UK
+    integer display_order
+    timestamp created_at
   }
 
   tb_chat_room {
-    BIGINT       room_id PK
-    BIGINT       user_seq FK
-    BIGINT       company_seq FK "변경 불가 — 한 방=한 기업"
-    VARCHAR_50   room_title "첫 질문 20자 슬라이스"
-    TIMESTAMP    last_active_at "터치 시 갱신"
-    BOOLEAN      is_active "세션 활성 여부 (v2 재정의)"
-    TIMESTAMP    closed_at "isActive=false 시 세팅 (멱등)"
-    TIMESTAMP    created_at
+    bigint room_id PK
+    bigint user_seq FK
+    bigint company_seq FK
+    varchar room_title
+    timestamp last_active_at
+    boolean is_active
+    timestamp closed_at
+    timestamp created_at
   }
 
   tb_qa_history {
-    BIGINT       qa_id PK
-    BIGINT       chat_room_id FK
-    TEXT         question
-    TEXT         answer
-    TEXT         source_content "FastAPI 인용 근거 텍스트"
-    TEXT         macro_snapshot "거시지표 동결 텍스트"
-    DOUBLE       grounded_score "0.0~1.0, nullable"
-    TIMESTAMP    created_at
+    bigint qa_id PK
+    bigint chat_room_id FK
+    text question
+    text answer
+    text source_content
+    text macro_snapshot
+    double grounded_score
+    timestamp created_at
   }
           </pre>
       </div>
+      <p class="text-xs text-slate-500">
+        <strong>관계 label</strong>: <code>has</code>=Refresh 토큰 보유 · <code>owns</code>=대화방 소유 · <code>referenced</code>=기업 참조(<code>tb_chat_room.company_seq</code>) · <code>pinned</code>=메인 핀 등록(1:0..1) · <code>contains</code>=Q&amp;A 이력 포함.
+        <strong>cardinality</strong>: <code>||--o{</code> = 1:N · <code>||--o|</code> = 1:0..1.
+        <strong>key</strong>: PK=Primary Key · FK=Foreign Key · UK=Unique Key. <code>tb_company_main.company_seq</code>는 FK이자 UK(한 회사당 메인 핀 1개) — mermaid v10 erDiagram이 합성 키 표기를 못 받아 UK만 표기.
+        각 컬럼 의미·제약·인덱스 정책은 <strong>아래 "테이블 상세"</strong> 절에서 자세히 다룹니다.
+      </p>
 
       <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">테이블 상세</h4>
 
@@ -4701,6 +4838,20 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-alt">삼성전자 CompanyPage. 챗봇 패널이 열려 있고 "삼성전자 영업이익 알려줘" 사용자 말풍선 아래 AI 답변 말풍선("…제57기 43,601,051,000,000원, 제56기 32,725,961,000,000원입니다.")이 보인다. <strong>출처 모달(SourceModal)이 펼쳐진 상태</strong>로 우측 하단에 정확도 뱃지(green, "100%"), 인용 근거 본문(section: "정형 재무(DART)"), DART 원문 링크가 노출. 헤더 우측엔 세션 타이머(30:00)·새 채팅 버튼·X 닫기 버튼.</div>
           </div>
         </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-A_img1.png" alt="시나리오 A — 영업이익 정확수치 답변 (챗봇 패널)">
+              <figcaption>① 챗봇 답변 — 영업이익 정확수치 + 우측 하단 <code>?</code> 버튼</figcaption>
+            </figure>
+            <figure>
+              <img src="img/SC-A_img2.png" alt="시나리오 A — 출처 모달 + 정확도 뱃지 + DART 원문 링크">
+              <figcaption>② 출처 모달 — 인용 근거 본문 + 정확도 뱃지 + DART 원문 링크</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 A · "삼성전자 영업이익 알려줘"</figcaption>
+        </figure>
       </div>
 
       <!-- ============ 시나리오 B: 거시 결합 ============ -->
@@ -4729,6 +4880,20 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-title">스크린샷 가이드 — alt:</div>
             <div class="ph-alt">삼성전자 CompanyPage 챗봇 패널. 사용자 질문("요즘 환율·금리 상황에서 삼성 실적 어때?") 아래 AI 답변 말풍선이 보이고, <strong>답변 본문 안 또는 그 위에 거시 스냅샷 박스</strong>가 노출 — 환율(1,535원)·기준금리(2.5%)·국고채3년(3.81%)·KOSPI(2,640) 4개 지표가 표 형식 또는 인라인 chip 형식으로 표시. 답변 본문은 공시 실적 수치와 거시지표를 결합한 서술. 우측 하단 <code>?</code> 버튼.</div>
           </div>
+        </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-B_img1.png" alt="시나리오 B — 거시 결합 답변 + macroSnapshot 박스">
+              <figcaption>① 챗봇 답변 — 공시 실적 + 거시 스냅샷(환율·금리·국고채·KOSPI)</figcaption>
+            </figure>
+            <figure>
+              <img src="img/SC-B_img2.png" alt="시나리오 B — 출처 모달 (정형재무 + 거시 결합)">
+              <figcaption>② 출처 모달 — 정형재무 인용 + DART 원문 링크</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 B · "요즘 환율·금리 상황에서 삼성 실적 어때?"</figcaption>
         </figure>
       </div>
 
@@ -4759,6 +4924,16 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-alt">삼성전자 CompanyPage 챗봇 패널. 사용자 질문("SK하이닉스 영업이익 얼마야?") 아래 AI 답변 말풍선("현재 삼성전자에 관한 질문에만 답변드리고 있습니다…"). <strong>답변 말풍선 우측 하단에 <code>?</code> 버튼 없음</strong>(평소엔 있던 자리가 비어 있음). 정확도 뱃지도 없음. 다른 시나리오와의 차이를 강조하려면 시나리오 A 스크린샷과 나란히 보여주면 좋음.</div>
           </div>
         </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-C_img1.png" alt="시나리오 C — out_of_scope 답변 (? 버튼·정확도 뱃지 없음)">
+              <figcaption>스코프 가드 답변 — <code>?</code> 버튼·정확도 뱃지 없음(인용 근거 없음)</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 C · "SK하이닉스 영업이익 얼마야?"</figcaption>
+        </figure>
       </div>
 
       <!-- ============ 시나리오 D: 사전요약 트랙 (v2 차별점) ============ -->
@@ -4788,6 +4963,20 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-alt">삼성전자 CompanyPage 챗봇 패널. 사용자 질문("삼성전자 사업 내용 요약해줘") 아래 AI 답변 말풍선이 비교적 긴 문단(2~3문단)으로 사업 구조를 서술. 답변 안에 "DX/DS/SDC/Harman" 같은 부문명이 등장. 우측 하단 <code>?</code> 버튼 클릭 시 출처 모달에 사업의 개요·MD&amp;A 청크 인용 + 정확도 뱃지(green 또는 amber). <strong>응답 속도가 시나리오 A보다 빠른 것을 강조할 수 있다면 시연에서 더 인상적</strong>(사전요약은 LLM 호출 적음).</div>
           </div>
         </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-D_img1.png" alt="시나리오 D — 사업 내용 요약 답변 (사전요약 트랙)">
+              <figcaption>① 챗봇 답변 — 사업 구조 서술(DX·DS·SDC·Harman 등)</figcaption>
+            </figure>
+            <figure>
+              <img src="img/SC-D_img2.png" alt="시나리오 D — 출처 모달 (사전요약 조각 + 섹션 인용)">
+              <figcaption>② 출처 모달 — 사전요약 조각(섹션·rcept_no·DART 링크)</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 D · "삼성전자 사업 내용 요약해줘"</figcaption>
+        </figure>
       </div>
 
       <!-- ============ 시나리오 E: 멀티턴 ============ -->
@@ -4816,6 +5005,20 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-title">스크린샷 가이드 — alt:</div>
             <div class="ph-alt">삼성전자 CompanyPage 챗봇 패널. 위에서부터 (1) 사용자 "삼성전자 영업이익 알려줘", (2) AI "…43,601,051,000,000원…", (3) 사용자 "그럼 매출은?", (4) AI "…333,605,938,000,000원…" 4개 말풍선이 순서대로 보임. <strong>두 번째 사용자 질문이 짧고 주어 없음에 주목</strong>. 헤더 세션 타이머가 30:00 근처로 reset된 상태.</div>
           </div>
+        </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-E_img1.png" alt="시나리오 E — 첫 질문(영업이익) 답변">
+              <figcaption>① 첫 질문 — "영업이익" 정확수치 답변</figcaption>
+            </figure>
+            <figure>
+              <img src="img/SC-E_img2.png" alt="시나리오 E — 후속 질문 '그럼 매출은?' 답변 (history로 주어 해석)">
+              <figcaption>② 후속 질문 — "그럼 매출은?"(history로 주어 해석)</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 E · 멀티턴 (영업이익 → "그럼 매출은?")</figcaption>
         </figure>
       </div>
 
@@ -4847,6 +5050,20 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-alt">마이페이지(<code>/mypage</code>). 좌측에 만료된 채팅방 카드 목록 — 회사 로고(40x40 정사각) + 회사명 + 첫 질문 슬라이스 제목 + 날짜. 카드는 "오늘 / 어제 / 6월 21일" 같은 날짜 헤더로 그룹핑. 카드 하나가 활성 선택돼 있고 우측 <strong>ReadOnlyPanel</strong>에 해당 방의 Q&amp;A 타임라인이 표시(사용자/AI 말풍선 교대, 입력창은 없음).</div>
           </div>
         </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-F_img1.png" alt="시나리오 F — 30분 만료 배너 (챗봇 패널)">
+              <figcaption>① 만료 배너 — "세션이 만료되었습니다" + [새 채팅 시작]</figcaption>
+            </figure>
+            <figure>
+              <img src="img/SC-F_img2.png" alt="시나리오 F — 마이페이지 만료 방 목록 + ReadOnlyPanel">
+              <figcaption>② 마이페이지 — 만료 방 카드 + 읽기 전용 Q&amp;A 타임라인</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 F · 30분 만료 → 마이페이지 합류</figcaption>
+        </figure>
       </div>
 
       <!-- ============ 시나리오 G: 챗봇 타임아웃 + 에러 모달 ============ -->
@@ -4875,6 +5092,16 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-title">스크린샷 가이드 — alt:</div>
             <div class="ph-alt">CompanyPage 챗봇 패널이 배경으로 보이고, <strong>중앙에 ChatErrorModal</strong>이 떠 있는 상태. 모달 상단에 빨간 경고 아이콘(예: ⚠️ 또는 ⊗), 굵은 제목("AI 응답이 너무 오래 걸리고 있어요" 또는 "답변이 이미 처리됐을 수도 있어요"), 본문 안내 텍스트, 최하단 작은 회색 글씨로 <code>UPSTREAM_TIMEOUT · trace: a3f9b2…</code>(traceId 옆 클립보드 아이콘), 그 아래 녹색 [확인] 버튼. 배경 챗봇 패널의 <strong>입력창에는 원래 질문이 복원돼 있음</strong>(응답 있는 케이스) 또는 user 말풍선이 살아 있음(응답 없는 케이스).</div>
           </div>
+        </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-G_img1.png" alt="시나리오 G — ChatErrorModal (오류 안내 + traceId)">
+              <figcaption>ChatErrorModal — 친절 안내 메시지 + 오류코드/traceId</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 G · 챗봇 타임아웃 → 에러 모달 + 입력값 복원</figcaption>
         </figure>
       </div>
 
@@ -4905,6 +5132,20 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-alt">삼성전자 CompanyPage 챗봇 패널. 사용자 질문("삼성전자 2024년 사업보고서 영업이익 알려줘") 아래 AI 답변("2024년 사업보고서(제56기) 기준 영업이익은 6,566,976,000,000원입니다."). <strong>출처 모달이 열려 있어 인용 근거의 <code>reportNm</code>이 모두 "사업보고서 (2024.12)"로 통일됨</strong>이 시각적으로 강조. 우측 하단 정확도 뱃지 green. 비교를 위해 "영업이익 알려줘"(연도 무지정, 시나리오 A) 답변과 나란히 보여주면 임팩트 최대.</div>
           </div>
         </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-H_img1.png" alt="시나리오 H — 2024년 사업보고서 기간 질의 답변">
+              <figcaption>① 챗봇 답변 — 2024년 사업보고서 기준 영업이익</figcaption>
+            </figure>
+            <figure>
+              <img src="img/SC-H_img2.png" alt="시나리오 H — 출처 모달 (사업연도 필터로 통일된 보고서 인용)">
+              <figcaption>② 출처 모달 — 인용 근거가 모두 같은 사업연도(FY2024)로 통일</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 H · "삼성전자 2024년 사업보고서 영업이익"</figcaption>
+        </figure>
       </div>
 
       <!-- ============ 시나리오 I: 기수 질의 (2026-06-24 신규) ============ -->
@@ -4933,6 +5174,20 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
             <div class="ph-title">스크린샷 가이드 — alt:</div>
             <div class="ph-alt">삼성전자 CompanyPage 챗봇 패널. 사용자 질문("삼성전자 제57기말 자기주식 알려줘") 아래 AI 답변("제57기말(2025 사업연도) 자기주식은 …주입니다."). <strong>답변에 사용자 입력 기수 표현이 그대로 보존</strong>됨이 핵심. 출처 모달엔 매핑된 사업연도 보고서(예: "2025 사업보고서 주요계정") 인용. 정확도 뱃지 green.</div>
           </div>
+        </figure>
+
+        <figure class="shot real">
+          <div class="grid">
+            <figure>
+              <img src="img/SC-I_img1.png" alt="시나리오 I — 제57기말 기수 질의 답변 (fiscal_anchor 매핑)">
+              <figcaption>① 챗봇 답변 — "제57기말" 표현 그대로 보존, 매핑된 사업연도로 조회</figcaption>
+            </figure>
+            <figure>
+              <img src="img/SC-I_img2.png" alt="시나리오 I — 출처 모달 (매핑된 사업연도 보고서 인용)">
+              <figcaption>② 출처 모달 — fiscal_anchor로 매핑된 사업연도 보고서 인용</figcaption>
+            </figure>
+          </div>
+          <figcaption>📷 실제 화면 — 시나리오 I · "삼성전자 제57기말 자기주식 알려줘"</figcaption>
         </figure>
       </div>
 
@@ -5028,6 +5283,84 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
     });
   }, { rootMargin: '-30% 0px -60% 0px' });
   sections.forEach((s) => io.observe(s));
+</script>
+
+<script>
+  // 라이트박스 — 이미지(.shot.real img) + mermaid SVG(.mermaid-card svg) 공용
+  (function setupLightbox() {
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.setAttribute('hidden', '');
+    overlay.innerHTML = `
+      <button class="lightbox-close no-print" aria-label="닫기">✕</button>
+      <div class="lightbox-content"></div>
+      <div class="lightbox-caption"></div>
+    `;
+    document.body.appendChild(overlay);
+
+    const content = overlay.querySelector('.lightbox-content');
+    const caption = overlay.querySelector('.lightbox-caption');
+    const closeBtn = overlay.querySelector('.lightbox-close');
+
+    function open(node, captionHtml) {
+      content.innerHTML = '';
+      content.appendChild(node);
+      caption.innerHTML = (captionHtml || '') + '<span class="hint">ESC · 오버레이 클릭 · ✕ 버튼으로 닫기</span>';
+      overlay.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      overlay.setAttribute('hidden', '');
+      content.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    overlay.addEventListener('click', (e) => {
+      // 오버레이 또는 닫기 버튼이면 close. content 영역 클릭은 무시
+      if (e.target === overlay || e.target === closeBtn || closeBtn.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !overlay.hasAttribute('hidden')) close();
+    });
+
+    // 클릭 위임 — 이미지 / mermaid 카드
+    document.addEventListener('click', (e) => {
+      // ① 실제 스크린샷 이미지
+      const img = e.target.closest('.shot.real img');
+      if (img) {
+        const clone = img.cloneNode(true);
+        const fig = img.closest('figure');
+        const cap = fig?.querySelector('figcaption')?.innerHTML || img.alt || '';
+        open(clone, cap);
+        return;
+      }
+
+      // ② mermaid SVG (렌더 완료된 경우만 — syntax error 케이스는 svg가 없음)
+      const card = e.target.closest('.mermaid-card');
+      if (card) {
+        const svg = card.querySelector('svg');
+        if (!svg) {
+          console.warn('[lightbox] mermaid SVG not found in card', card);
+          return;
+        }
+        // SVG의 mermaid 자동 inline style·width/height 다 제거 후 wrapper로 명시 sizing
+        const cloneSvg = svg.cloneNode(true);
+        cloneSvg.removeAttribute('width');
+        cloneSvg.removeAttribute('height');
+        cloneSvg.removeAttribute('style');
+        cloneSvg.style.width = '100%';
+        cloneSvg.style.height = '100%';
+        cloneSvg.style.maxWidth = 'none';
+        cloneSvg.style.maxHeight = 'none';
+
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'width: 90vw; height: 80vh; background: #fff; border-radius: 0.625rem; padding: 1.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;';
+        wrap.appendChild(cloneSvg);
+
+        open(wrap, '📊 다이어그램 확대');
+      }
+    });
+  })();
 </script>
 </body>
 </html>
