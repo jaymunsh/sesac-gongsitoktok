@@ -79,7 +79,21 @@ flowchart TB
 
 ## 🚀 빠른 시작
 
+**사전 요구사항**
+
+| 항목 | 버전 | 비고 |
+|---|---|---|
+| JDK | **21** (Temurin 등) | Virtual Threads 활성. Gradle toolchain 이 자동 다운로드도 지원 |
+| Docker | 20.10+ | 로컬 PostgreSQL 16 컨테이너용 |
+| Git | 2.x | — |
+
+> Gradle 은 wrapper(`./gradlew`)로 동봉돼 별도 설치 불필요. AI 서버(`gongsitoktok-pydantic`)는 별도 레포·별도 런타임(Python 3.12).
+
 ```bash
+# 0. 환경변수 — .env.example 을 복사해 값 채우기 (DB 자격증명·JWT_SECRET 등)
+cp .env.example .env
+#    JWT_SECRET 은 32바이트 이상: openssl rand -hex 32 로 생성해 채움
+
 # 1. PostgreSQL (Docker, 한 번만)
 docker run -d --name gongsi-pg -p 5432:5432 \
   -e POSTGRES_USER=gongsi -e POSTGRES_PASSWORD=gongsi \

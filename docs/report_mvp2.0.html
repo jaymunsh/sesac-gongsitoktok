@@ -767,7 +767,7 @@ flowchart LR
             <li><strong>사전요약 트랙</strong> — <code>summary_&lt;corp&gt;</code> 1,188 요약, 빌드때 1회·질의땐 꺼내쓰기. corpus 폴백 보험</li>
             <li><strong>정형재무 결합</strong> — DART <code>fnlttSinglAcnt</code> 정확수치 + DART 원문 링크</li>
             <li><strong>거시 결합</strong> — ECOS 환율·금리·국고채·KOSPI + 날짜 SQLite 캐시</li>
-            <li><strong>3계층 eval</strong> — ①검색(무료·결정적, 13/13 hit@5 100%, MRR 0.933) ②행동(6/6) ③회귀 골든(16/16) <span class="text-xs text-slate-500">· 2026-06-24 기준</span></li>
+            <li><strong>3계층 eval</strong> — ①검색(무료·결정적, 13/13 hit@5 100%, MRR 0.933) ②행동(9/9) ③회귀 골든(18/18) <span class="text-xs text-slate-500">· 2026-06-25 기준</span></li>
             <li><strong>Logfire 콘솔 관측성</strong> + <code>X-Trace-Id</code> 端-to-端 추적</li>
           </ul>
         </div>
@@ -816,7 +816,7 @@ npm install &amp;&amp; npm run dev
         <p class="text-sm m-0">AI 파트(gongsitoktok-pydantic) 검증은 <strong>인프로세스</strong>로 돌릴 수 있습니다 — 서버 기동 불필요.
           <code>PYTHONPATH=. .venv/bin/python -m eval.eval_retrieval</code> (검색·무료·결정적) ·
           <code>... -m eval.eval_chat</code> (행동) ·
-          <code>... -m eval.run_golden_inproc</code> (회귀 골든셋 16건, 2026-06-24 기준). 자세한 기준·결과는 <a href="#ch-8-8">§8.8 3계층 eval</a>.</p>
+          <code>... -m eval.run_golden_inproc</code> (회귀 골든셋 20건, 2026-06-25 기준). 자세한 기준·결과는 <a href="#ch-8-8">§8.8 3계층 eval</a>.</p>
       </div>
 
       <h3 id="ch-1-6" class="text-xl font-bold text-slate-900 mt-8 mb-3">1.6 사용자 여정 워크스루 — 처음 보는 사람을 위한 5분 가이드</h3>
@@ -3363,7 +3363,7 @@ score[id] = (1-w) / (60 + rank_vec) + w / (60 + rank_bm25)
       <p>"좋은 eval이 진짜 버그를 잡는다"가 v2 개발의 핵심 경험. 3계층으로 분리해 비용·결정성을 다르게 갖춥니다. <strong>전부 인프로세스 — 서버 기동 불필요.</strong></p>
 
       <table class="report-table">
-        <thead><tr><th>계층</th><th>무엇</th><th>비용</th><th>현재 결과 (v2.0, 2026-06-24 기준)</th></tr></thead>
+        <thead><tr><th>계층</th><th>무엇</th><th>비용</th><th>현재 결과 (v2.0, 2026-06-25 기준)</th></tr></thead>
         <tbody>
         <tr>
           <td>① <strong>검색</strong> (<code>eval_retrieval.py</code>)</td>
@@ -3375,13 +3375,13 @@ score[id] = (1-w) / (60 + rank_vec) + w / (60 + rank_bm25)
           <td>② <strong>행동</strong> (<code>eval_chat.py</code>)</td>
           <td>멀티턴·거시결합·표질의·되묻기·스코프비교·숫자신선도·기간 한정</td>
           <td>LLM (턴당 푼돈)</td>
-          <td><strong>6/6 must + 2 watch</strong></td>
+          <td><strong>9/9 must + 2 watch</strong></td>
         </tr>
         <tr>
           <td>③ <strong>회귀</strong> (<code>run_golden_inproc.py</code>)</td>
-          <td>16케이스 회귀 스모크 — 인텐트·정확수치·스코프·사업연도·기수</td>
+          <td>20케이스 회귀 스모크 — 인텐트·정확수치·스코프·사업연도·기수</td>
           <td>LLM</td>
-          <td><strong>16/16 must + 2 watch</strong></td>
+          <td><strong>18/18 must + 2 watch</strong></td>
         </tr>
         </tbody>
       </table>
@@ -3437,7 +3437,7 @@ def evaluate(case, resp):
       <h4 class="text-base font-semibold text-slate-800 mt-5 mb-2">전체 케이스 목록 (무엇을 검사했나)</h4>
       <p>실제 검사한 케이스 전부. ✅=must 통과, 🔶=watch(약점·추적용), 🆕=2026-06-24 신규 추가.</p>
 
-      <h5 class="font-semibold text-slate-700 mt-4 mb-1">① 회귀 골든 — 16건 · must 16/16</h5>
+      <h5 class="font-semibold text-slate-700 mt-4 mb-1">① 회귀 골든 — 20건 · must 18/18 · watch 2</h5>
       <table class="report-table">
         <thead><tr><th>케이스</th><th>질문</th><th>검사 포인트</th></tr></thead>
         <tbody>
@@ -3448,8 +3448,6 @@ def evaluate(case, resp):
         <tr><td>✅ ss-num-assets</td><td>삼성 자산총계</td><td>566,942,110 / 514,531,948</td></tr>
         <tr><td>🔶 ss-route-business-plain</td><td>삼성 무슨 사업 해?</td><td>'요약' 없는 서술 → summary</td></tr>
         <tr><td>✅ ss-scope-other-company</td><td>SK하이닉스 영업이익</td><td>out_of_scope=true</td></tr>
-        <tr><td>🆕 ss-fy-financial</td><td>삼성 제55기 영업이익 / 2024년 사업보고서</td><td>사업연도 필터(bsns_year=2024) → 6,566,976</td></tr>
-        <tr><td>🆕 ss-gisu-shares</td><td>제57기말 자기주식 / 발행주식총수</td><td>fiscal_anchor()로 기수↔연도 자동 매핑 → 정확수치</td></tr>
         <tr><td>✅ hd-summary-overview</td><td>현대 회사 개요 요약</td><td>intent=summary · verdict≠fail</td></tr>
         <tr><td>✅ hd-summary-business</td><td>현대 사업 내용 요약</td><td>자동차·전기차·제네시스 등 포함</td></tr>
         <tr><td>✅ hd-num-revenue</td><td>현대 연간 매출액</td><td>175,231,153</td></tr>
@@ -3457,10 +3455,17 @@ def evaluate(case, resp):
         <tr><td>✅ hd-num-liabilities</td><td>현대 부채총계</td><td>숫자 포함 · verdict≠fail</td></tr>
         <tr><td>🔶 hd-route-business-plain</td><td>현대 무슨 사업 해?</td><td>summary 라우팅</td></tr>
         <tr><td>✅ hd-scope-other-company</td><td>기아 매출</td><td>out_of_scope=true</td></tr>
+        <tr><td>🆕 ss-period-shares</td><td>삼성 2024년 사업보고서 발행주식총수</td><td>기간 한정(bsns_year)에도 corpus 근거 유지(E2E)</td></tr>
+        <tr><td>🆕 ss-fy-financial</td><td>삼성 제55기 영업이익 / 2024년 사업보고서</td><td>재무 트랙이 요청 사업연도(FY2024) 조회 → 6,566,976</td></tr>
+        <tr><td>🆕 ss-fy-summary</td><td>삼성 2024년 사업 요약</td><td>summary 트랙도 사업연도 필터 존중(회귀 0)</td></tr>
+        <tr><td>🆕 ss-gisu-shares</td><td>제57기말 자기주식 / 발행주식총수</td><td>fiscal_anchor()로 기수↔연도 매핑(제57기=FY2025)</td></tr>
+        <tr><td>🆕 ss-gisu-56-opincome</td><td>삼성 제56기 영업이익</td><td>제56기=FY2024 off-by-one 가드(#13)</td></tr>
+        <tr><td>🆕 hd-company-no-mention</td><td>(현대 방, 회사명 없이) 매출 얼마야?</td><td>방 회사 근거로 답하되 타사명(삼성) 금지(#15)</td></tr>
         </tbody>
       </table>
+      <p class="text-xs text-slate-500">🔶 watch 2건 = <code>ss-route-business-plain</code>·<code>hd-route-business-plain</code>(라우팅 견고성, 미통과 허용·추적용). 나머지 18건이 must.</p>
 
-      <h5 class="font-semibold text-slate-700 mt-4 mb-1">② 행동 — 8건 · must 6/6</h5>
+      <h5 class="font-semibold text-slate-700 mt-4 mb-1">② 행동 — 11건 · must 9/9 · watch 2</h5>
       <table class="report-table">
         <thead><tr><th>케이스</th><th>질문</th><th>검사 포인트</th></tr></thead>
         <tbody>
@@ -3469,12 +3474,15 @@ def evaluate(case, resp):
         <tr><td>✅ table-segment</td><td>삼성 사업부문 어떻게 나뉘어?</td><td>DX·DS·부문 포함(표-인식)</td></tr>
         <tr><td>✅ num-freshness-revenue</td><td>현대 매출액</td><td>숫자 포함(값 미고정)</td></tr>
         <tr><td>✅ smalltalk-thanks</td><td>오 고마워</td><td>intent=smalltalk · 근거없음</td></tr>
-        <tr><td>🆕 ss-period-shares</td><td>삼성 2024년 사업보고서 발행주식총수</td><td>기간 한정(bsns_year)으로 세 트랙 통합 회수</td></tr>
+        <tr><td>✅ scope-compare</td><td>삼성이랑 SK하이닉스 비교</td><td>out_of_scope=true (타사 비교 차단)</td></tr>
+        <tr><td>🆕 scope-offdomain</td><td>압구정역 맛집 추천해줘</td><td>out_of_scope=true (공시·회사 무관 차단)</td></tr>
+        <tr><td>🆕 scope-stock-self</td><td>(삼성 방) 지금 삼성 주식 사도 돼?</td><td>out_of_scope=true · detected_company=None(#16)</td></tr>
+        <tr><td>🆕 scope-stock-anaphora</td><td>(삼성 방, history 현대) 이 회사 주식 어때?</td><td>detected=None, history 타사 안 끌어옴(#16)</td></tr>
         <tr><td>🔶 clarify-ambiguous</td><td>삼성 이익 얼마야?</td><td>'이익' 모호 → 되묻기(변동 허용)</td></tr>
         <tr><td>🔶 unanswerable-future</td><td>현대 내년 전망치</td><td>미래 전망 환각 대신 한계</td></tr>
         </tbody>
       </table>
-      <p class="text-xs text-slate-500">* <code>scope-compare</code>(삼성 vs SK하이닉스 비교) must 케이스는 06-24 갱신에서 <code>ss-period-shares</code>로 슬롯 교체 — 비교 스코프 가드는 회귀 골든 <code>ss-scope-other-company</code>·<code>hd-scope-other-company</code>에서 이미 커버됨.</p>
+      <p class="text-xs text-slate-500">🔶 watch 2건 = <code>clarify-ambiguous</code>·<code>unanswerable-future</code>(되묻기·환각 한계, 변동 허용). 나머지 9건이 must. <code>ss-period-shares</code>는 06-25 기준 회귀 골든셋으로 이관됨.</p>
 
       <h5 class="font-semibold text-slate-700 mt-4 mb-1">③ 검색 — 13건 · must 13/13 hit@5(100%) · MRR 0.933</h5>
       <table class="report-table">
@@ -4946,7 +4954,7 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
           <tr><th>응답 예시</th><td><code>"삼성전자 영업이익은 제57기 43,601,051,000,000원, 제56기 32,725,961,000,000원입니다."</code></td></tr>
           <tr><th>화면 효과</th><td>답변 말풍선 + 우측 하단 회색 원 + 흰색 <code>?</code> 버튼. <code>?</code> 클릭 시 <code>SourceModal</code> — section_title="정형 재무(DART)" citation + <strong>DART 원문 링크</strong> + 정확도 뱃지 <strong>green 100%</strong></td></tr>
           <tr><th>설계 의도</th><td>정확수치는 RAG가 아니라 <strong>정형 API로 결정적 획득</strong>. LLM이 표에서 숫자 줍는 환각 위험 차단. <strong>provenance는 코드가 citations[:5]로 고정</strong> → 에이전트가 출처 지어내기 불가능</td></tr>
-          <tr><th>회귀 테스트</th><td>v2.0 골든셋 <code>ss-num-opincome</code>·<code>ss-num-revenue</code>와 1:1 매핑 — <code>contains_any: ["43,601,051", "32,725,961"]</code>. must 12/12 통과</td></tr>
+          <tr><th>회귀 테스트</th><td>v2.0 골든셋 <code>ss-num-opincome</code>·<code>ss-num-revenue</code>와 1:1 매핑 — <code>contains_any: ["43,601,051", "32,725,961"]</code>. 회귀 골든 must 18/18 통과</td></tr>
           </tbody>
         </table>
 
@@ -4989,7 +4997,7 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
           <tr><th>응답 예시</th><td>"삼성전자 영업이익은 제57기 43,601,051,000,000원…. 같은 시점 환율 1,535원·기준금리 2.5%·국고채3년 3.81%·KOSPI 약 2,640선이며, 반도체 부문 수출 비중이 높아 환율 영향이 큰 사업 구조입니다." (<strong>인과 단정은 피함</strong> — 사실 결합만)</td></tr>
           <tr><th>화면 효과</th><td>답변 말풍선 + 그 안에 <strong>거시 스냅샷 박스</strong>(<code>macroSnapshot</code> 필드)가 함께 렌더 — 환율·금리·국고채·KOSPI를 표 형식으로 시각화. <code>contract.to_v2</code>가 <code>chunk_id="macro-ecos"</code>는 <code>sources[]</code>에서 제외하고 <code>macroSnapshot</code>으로만 노출(시각 분리)</td></tr>
           <tr><th>설계 의도</th><td>공시(과거 시점) + 거시(현재 시점)를 "같은 시점의 사실"로 결합. <strong>인과 단정은 LLM 환각 위험</strong>이라 <code>_PERSONA</code> + writer 지시문에 "결합만, 단정 금지" 명시. 과거 거시값은 불변 → 날짜별 1회 호출 후 캐시</td></tr>
-          <tr><th>회귀 테스트</th><td>v2.0 행동 eval 케이스 <code>macro-combine</code> — <code>macro_used: true</code> assertion. must 6/6 통과</td></tr>
+          <tr><th>회귀 테스트</th><td>v2.0 행동 eval 케이스 <code>macro-combine</code> — <code>macro_used: true</code> assertion. 행동 must 9/9 통과</td></tr>
           </tbody>
         </table>
 
@@ -5365,12 +5373,12 @@ http://localhost:8000/docs          # Swagger UI</code></pre>
       <!-- ============ eval 연결 ============ -->
       <div class="callout callout-info">
         <div class="callout-title">🔁 자동 회귀 — 위 시나리오가 어떻게 골든셋과 연결되나</div>
-        <p class="text-sm m-0">위 10개 시나리오 중 A·B·C·D·E·H·I·J는 <strong>v2.0의 3계층 eval과 1:1 매핑</strong>됩니다(<code>gongsitoktok-pydantic/eval/</code>). 골든 16건(must 16/16)·행동 8건(must 6/6)·검색 13건(must 13/13 hit@5 100%·MRR 0.933) — 2026-06-24 기준. 사람이 시연하지 않아도 자동 회귀로 같은 케이스가 검증됩니다. F·G는 Spring 통합 테스트(R4 — 운영 진입 전 작성 권장)로 커버 예정. <strong>"시연 케이스 = 회귀 케이스" 정합</strong>이 v2.0에서 강화됐고 v3.0에서 더 확장 예정. 자세한 기준·결과는 <a href="#ch-8-8">§8.8 3계층 eval</a>.</p>
+        <p class="text-sm m-0">위 10개 시나리오 중 A·B·C·D·E·H·I·J는 <strong>v2.0의 3계층 eval과 1:1 매핑</strong>됩니다(<code>gongsitoktok-pydantic/eval/</code>). 골든 20건(must 18/18)·행동 11건(must 9/9)·검색 13건(must 13/13 hit@5 100%·MRR 0.933) — 2026-06-25 기준. 사람이 시연하지 않아도 자동 회귀로 같은 케이스가 검증됩니다. F·G는 Spring 통합 테스트(R4 — 운영 진입 전 작성 권장)로 커버 예정. <strong>"시연 케이스 = 회귀 케이스" 정합</strong>이 v2.0에서 강화됐고 v3.0에서 더 확장 예정. 자세한 기준·결과는 <a href="#ch-8-8">§8.8 3계층 eval</a>.</p>
       </div>
 
       <div class="callout callout-note">
         <div class="callout-title">📂 시연 후 산출물</div>
-        <p class="text-sm m-0">시연 영상이 있다면 YouTube unlisted 업로드 + 본 보고서에 임베드 가능(현재는 placeholder만). 스크린샷을 채워 넣을 때는 <code>docs/screenshots/</code> 디렉토리 만들어 PNG 저장 후 각 <code>&lt;figure class="shot placeholder"&gt;</code>를 <code>&lt;figure class="shot"&gt;&lt;img src="screenshots/A_revenue.png" alt="…"&gt;&lt;/figure&gt;</code> 형식으로 교체.</p>
+        <p class="text-sm m-0">시나리오 A~J의 실제 화면 캡처는 <code>docs/img/SC-*.png</code>로 이미 적용돼 있다(답변 화면 <code>_img1</code> + 출처 모달 <code>_img2</code>). 각 시나리오의 <code>&lt;figure class="shot real"&gt;</code>가 해당 PNG를 라이트박스(클릭 확대)와 함께 노출한다. 시연 영상이 있다면 YouTube unlisted 업로드 후 본 보고서에 추가 임베드 가능.</p>
       </div>
 
     </div>
